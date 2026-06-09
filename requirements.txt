@@ -1,0 +1,35 @@
+# 粉墨数据台 — 项目依赖
+# 使用 npm install 逐个安装
+
+# === 框架与构建 ===
+react@^18
+react-dom@^18
+vite@^5
+@vitejs/plugin-react
+
+# === 路由 ===
+react-router-dom@^6
+
+# === 状态管理 ===
+zustand@^4
+
+# === 样式 ===
+tailwindcss@^3
+postcss
+autoprefixer
+
+# === 图表 ===
+echarts@^5
+echarts-for-react@^3
+d3@^7
+
+# === 3D ===
+three@^0.162
+
+# === 动效 ===
+framer-motion@^11
+gsap@^3
+
+# === 工具 ===
+fuse.js@^7        # 模糊搜索
+html-to-image@^1  # 导出图片
