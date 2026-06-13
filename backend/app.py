@@ -1,11 +1,12 @@
 import json, os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+PDF_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'jieya')
 
 def load_json(name):
     with open(os.path.join(DATA_DIR, name), encoding='utf-8') as f:
@@ -135,6 +136,13 @@ def get_heritage():
         'dynastyTimeline': dynasty_timeline,
         'sourceCount': dict(sorted(source_count.items(), key=lambda x: -x[1])),
     })
+
+@app.route('/api/play-pdf/<play_id>')
+def get_play_pdf(play_id):
+    for f in os.listdir(PDF_DIR):
+        if f.startswith(play_id):
+            return send_from_directory(PDF_DIR, f)
+    return jsonify({'error': 'not found'}), 404
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
