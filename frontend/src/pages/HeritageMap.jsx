@@ -4,10 +4,10 @@ import useStore from '../store/useStore'
 import ReactEChartsCore from 'echarts-for-react'
 
 const DYNASTY_ORDER = ['商', '周', '春秋', '战国', '秦', '汉', '三国', '晋', '南北朝',
-                       '隋', '唐', '五代', '宋', '元', '明', '清']
+                       '隋', '唐', '五代', '宋', '元', '明', '清', '历史朝代不详']
 
 export default function HeritageMap() {
-  const { plays, loaded, loadData } = useStore()
+  const { plays, loaded, error, loadData } = useStore()
   const navigate = useNavigate()
   const [brushedDynasties, setBrushedDynasties] = useState(null)
   const [zoomRange, setZoomRange] = useState({ start: 0, end: 100 })
@@ -120,7 +120,7 @@ export default function HeritageMap() {
     })
     // Top dynasties (filtered by brush if active)
     let topDyns = Object.keys(dg).sort((a, b) => {
-      const order = ['未知','商','周','春秋','战国','秦','汉','三国','晋','南北朝','隋','唐','五代','宋','元','明','清']
+      const order = ['历史朝代不详','商','周','春秋','战国','秦','汉','三国','晋','南北朝','隋','唐','五代','宋','元','明','清']
       return (order.indexOf(a) !== -1 ? order.indexOf(a) : 99) - (order.indexOf(b) !== -1 ? order.indexOf(b) : 99)
     }).filter(d => d !== '神话')
     if (brushedDynasties) topDyns = topDyns.filter(d => brushedDynasties.includes(d))
@@ -160,8 +160,17 @@ export default function HeritageMap() {
   }, [genreHeatmapData])
 
   if (!timelineOption) return (
-    <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-      <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+    <div className="flex flex-col items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
+      {error ? (
+        <>
+          <p className="text-vermillion-500 text-sm mb-2">◆</p>
+          <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
+          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
+          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+        </>
+      ) : (
+        <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+      )}
     </div>
   )
 

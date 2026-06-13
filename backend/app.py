@@ -123,7 +123,7 @@ def get_heritage():
     plays = load_json('plays.json')
     source_count = {}
     dynasty_order = ['商', '周', '春秋', '战国', '秦', '汉', '三国', '晋', '南北朝',
-                     '隋', '唐', '五代', '宋', '元', '明', '清']
+                     '隋', '唐', '五代', '宋', '元', '明', '清', '历史朝代不详']
     dynasty_timeline = []
     for d in dynasty_order:
         count = sum(1 for p in plays if p.get('dynasty') == d)

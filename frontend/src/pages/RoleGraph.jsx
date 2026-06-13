@@ -8,14 +8,14 @@ const CATEGORY_COLORS = { '生': '#6366F1', '旦': '#EF4444', '净': '#F59E0B', 
 const CATEGORIES = ['生', '旦', '净', '丑']
 
 export default function RoleGraph() {
-  const { roles, relations, loaded, loadData } = useStore()
+  const { roles, relations, loaded, error, loadData } = useStore()
   const navigate = useNavigate()
   const [category, setCategory] = useState('生')
   useEffect(() => { if (!loaded) loadData() }, [loaded, loadData])
 
   const filteredRoles = useMemo(() => {
     if (!roles.length) return []
-    return roles.filter(r => r.category === category)
+    return roles.filter(r => r.category === category && !r.generic)
   }, [roles, category])
 
   const stats = useMemo(() => {
@@ -39,8 +39,17 @@ export default function RoleGraph() {
   }, [navigate])
 
   if (!stats) return (
-    <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-      <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+    <div className="flex flex-col items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
+      {error ? (
+        <>
+          <p className="text-vermillion-500 text-sm mb-2">◆</p>
+          <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
+          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
+          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+        </>
+      ) : (
+        <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+      )}
     </div>
   )
 
@@ -127,6 +136,9 @@ export default function RoleGraph() {
           {category}行角色列表<span className="text-ink-500 ml-1">（点击查看脸谱）</span>
         </h3>
         <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-2 max-h-80 overflow-y-auto">
+          {filteredRoles.length > 200 && (
+            <p className="col-span-full text-ink-600 text-[10px] px-1">前 200 个角色，共 {filteredRoles.length} 个（{category}行）</p>
+          )}
           {filteredRoles.slice(0, 200).map(r => (
             <button
               key={r.name}
@@ -137,9 +149,6 @@ export default function RoleGraph() {
             </button>
           ))}
         </div>
-        <p className="text-ink-500 text-[10px] mt-2">
-          显示前 200 个角色，共 {filteredRoles.length} 个（{category}行）
-        </p>
       </div>
     </div>
   )

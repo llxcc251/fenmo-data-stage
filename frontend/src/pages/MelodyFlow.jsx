@@ -4,7 +4,7 @@ import useStore from '../store/useStore'
 import ReactEChartsCore from 'echarts-for-react'
 
 export default function MelodyFlow() {
-  const { plays, melodies, loaded, loadData } = useStore()
+  const { plays, melodies, loaded, error, loadData } = useStore()
   const navigate = useNavigate()
   useEffect(() => { if (!loaded) loadData() }, [loaded, loadData])
 
@@ -32,8 +32,17 @@ export default function MelodyFlow() {
   }, [plays, melodies])
 
   if (!data) return (
-    <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-      <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+    <div className="flex flex-col items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
+      {error ? (
+        <>
+          <p className="text-vermillion-500 text-sm mb-2">◆</p>
+          <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
+          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
+          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+        </>
+      ) : (
+        <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+      )}
     </div>
   )
 

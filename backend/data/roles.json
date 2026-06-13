@@ -614,7 +614,8 @@
       "70402101",
       "80000025"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "中军",
@@ -632,7 +633,8 @@
       "70901117",
       "90000007"
     ],
-    "faceColor": "黑"
+    "faceColor": "黑",
+    "generic": true
   },
   {
     "name": "中军乙",
@@ -1450,7 +1452,8 @@
     "plays": [
       "01032006"
     ],
-    "faceColor": ""
+    "faceColor": "",
+    "generic": true
   },
   {
     "name": "仙女丁",
@@ -7168,7 +7171,8 @@
       "01012004",
       "70005106"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "哇噜胎",
@@ -7433,7 +7437,8 @@
     "plays": [
       "01012006"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "嘉靖",
@@ -8486,7 +8491,8 @@
       "70002103",
       "80000011"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "太老爷",
@@ -10244,7 +10250,8 @@
       "70002104",
       "70002105"
     ],
-    "faceColor": ""
+    "faceColor": "",
+    "generic": true
   },
   {
     "name": "家丁",
@@ -10262,7 +10269,8 @@
     "plays": [
       "01029006"
     ],
-    "faceColor": ""
+    "faceColor": "",
+    "generic": true
   },
   {
     "name": "家将",
@@ -10277,7 +10285,8 @@
       "03097002",
       "80000029"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "家童",
@@ -10313,7 +10322,8 @@
       "04045004",
       "80000029"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "家院乙",
@@ -10608,7 +10618,8 @@
       "01035005",
       "14001005"
     ],
-    "faceColor": ""
+    "faceColor": "",
+    "generic": true
   },
   {
     "name": "小林黛玉",
@@ -11520,7 +11531,8 @@
       "01010014",
       "03055006"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "差役乙",
@@ -14294,7 +14306,8 @@
     "plays": [
       "01013012"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "打擂者乙",
@@ -14390,7 +14403,8 @@
       "09007001",
       "11001001"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "报子乙",
@@ -14517,7 +14531,8 @@
     "plays": [
       "90000007"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "提牢主事",
@@ -14915,7 +14930,8 @@
       "70002103",
       "70003120"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "旗牌乙",
@@ -18709,7 +18725,8 @@
       "70002104",
       "70002105"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "栾家院",
@@ -19132,7 +19149,8 @@
       "14002004",
       "70003115"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "樵夫乙",
@@ -20358,7 +20376,8 @@
       "01021002",
       "01024001"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "渔婆",
@@ -21188,7 +21207,8 @@
     "plays": [
       "70902158"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "狱官",
@@ -23563,7 +23583,8 @@
     "plays": [
       "70002104"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "百姓甲",
@@ -24092,7 +24113,8 @@
       "70002202",
       "70002205"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "禁婆",
@@ -26425,7 +26447,8 @@
       "70002102",
       "70002202"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "船家",
@@ -30851,7 +30874,8 @@
       "09001002",
       "70203107"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "车步青",
@@ -32596,7 +32620,8 @@
       "70201204",
       "70902176"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "门客",
@@ -33597,7 +33622,8 @@
       "70002205",
       "94000002"
     ],
-    "faceColor": "白"
+    "faceColor": "白",
+    "generic": true
   },
   {
     "name": "陶三春",

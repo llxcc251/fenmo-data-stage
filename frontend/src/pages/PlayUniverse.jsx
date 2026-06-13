@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import useStore from '../store/useStore'
 
-const DYNASTY_ORDER = ['商','周','春秋','战国','秦','汉','三国','晋','南北朝','隋','唐','五代','宋','北宋','南宋','元','明','清','民间故事']
+const DYNASTY_ORDER = ['商','周','春秋','战国','秦','汉','三国','晋','南北朝','隋','唐','五代','宋','北宋','南宋','元','明','清','历史朝代不详']
 
 const DIMS = [
   { key: 'dynasty', label: '朝代' },
@@ -11,13 +11,31 @@ const DIMS = [
 ]
 
 export default function PlayUniverse() {
-  const { plays, roles, loaded, loadData } = useStore()
+  const { plays, roles, loaded, error, loadData } = useStore()
   const navigate = useNavigate()
-  const [search, setSearch] = useState('')
-  const [dim, setDim] = useState('dynasty')
-  const [value, setValue] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // Initialize from URL params
+  const [search, setSearch] = useState(() => searchParams.get('search') || '')
+  const [dim, setDim] = useState(() => {
+    if (searchParams.get('dynasty')) return 'dynasty'
+    if (searchParams.get('genre')) return 'genre'
+    if (searchParams.get('melody')) return 'melody'
+    return 'dynasty'
+  })
+  const [value, setValue] = useState(() => {
+    return searchParams.get('dynasty') || searchParams.get('genre') || searchParams.get('melody') || ''
+  })
 
   useEffect(() => { if (!loaded) loadData() }, [loaded, loadData])
+
+  // Sync state to URL params
+  useEffect(() => {
+    const params = {}
+    if (search) params.search = search
+    if (value) params[dim] = value
+    setSearchParams(params, { replace: true })
+  }, [search, dim, value, setSearchParams])
 
   const roleMap = useMemo(() => {
     const m = {}
@@ -54,8 +72,8 @@ export default function PlayUniverse() {
         (p.dynasty || '').toLowerCase().includes(q) ||
         (p.genres || []).some(g => g.toLowerCase().includes(q)) ||
         (p.melodies || []).some(m => m.toLowerCase().includes(q)) ||
-        Object.keys(p.roleTypes || {}).some(r => r.toLowerCase().includes(q)) ||
-        (p.plot || '').toLowerCase().includes(q)
+        Object.keys(p.roleTypes || {}).some(r => r.toLowerCase().includes(q))
+        // plot excluded — too many false positives
       )
     }
     if (value) {
@@ -67,8 +85,17 @@ export default function PlayUniverse() {
   }, [plays, search, dim, value])
 
   if (!loaded) return (
-    <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-      <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+    <div className="flex flex-col items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
+      {error ? (
+        <>
+          <p className="text-vermillion-500 text-sm mb-2">◆</p>
+          <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
+          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
+          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+        </>
+      ) : (
+        <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+      )}
     </div>
   )
 
@@ -91,6 +118,7 @@ export default function PlayUniverse() {
           <button onClick={() => setSearch('')}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-ink-500 hover:text-jade-200/60 text-xs">✕</button>
         )}
+        <p className="text-ink-600 text-[10px] mt-1.5">搜索剧目名、别名、朝代、题材、声腔、角色名</p>
       </div>
 
       {/* Dimension selector */}
@@ -121,10 +149,27 @@ export default function PlayUniverse() {
       </div>
 
       {/* Results */}
-      {!value ? (
+      {filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <p className="text-ink-500 text-sm mb-1">没有找到匹配的剧目</p>
+          <p className="text-ink-600 text-[10px]">试试其他关键词或筛选条件</p>
+          {(search || value) && (
+            <button onClick={() => { setSearch(''); setValue('') }}
+              className="text-[10px] text-gold-500/60 hover:text-gold-400 mt-3 transition-colors">
+              清除所有筛选
+            </button>
+          )}
+        </div>
+      ) : !value ? (
         /* No specific value selected: show categories as sections */
         <div className="space-y-8">
-          {values.slice(0, 15).map(v => {
+          {values.filter(v => {
+            // When search is active, only show groups that have matching plays
+            if (!search) return true
+            if (dim === 'dynasty') return filtered.some(p => p.dynasty === v)
+            if (dim === 'genre') return filtered.some(p => (p.genres || []).includes(v))
+            return filtered.some(p => (p.melodies || []).includes(v))
+          }).slice(0, search ? values.length : 15).map(v => {
             let items
             if (dim === 'dynasty') items = filtered.filter(p => p.dynasty === v)
             else if (dim === 'genre') items = filtered.filter(p => (p.genres || []).includes(v))
@@ -185,16 +230,16 @@ function PlayCard({ play: p, roleMap, navigate }) {
       </p>
       <div className="mt-3 text-[10px] text-ink-500 border-t border-ink-700/30 pt-2 space-y-1">
         <div className="flex items-center gap-2">
-          <span>{Object.keys(p.roleTypes || {}).length} 角色：</span>
+          <span>{Object.entries(p.roleTypes || {}).filter(([n]) => !roleMap[n]?.generic).length} 角色：</span>
           <span className="flex flex-wrap gap-1">
-            {Object.entries(p.roleTypes || {}).slice(0, 5).map(([name, type]) => (
+            {Object.entries(p.roleTypes || {}).filter(([name]) => !roleMap[name]?.generic).slice(0, 5).map(([name, type]) => (
               <button key={name}
                 onClick={() => navigate(`/face-generator?role=${encodeURIComponent(name)}`)}
                 className="hover:text-gold-400 transition-colors">
                 {name}
               </button>
             ))}
-            {Object.keys(p.roleTypes || {}).length > 5 && <span>等 {Object.keys(p.roleTypes || {}).length} 位</span>}
+            {Object.entries(p.roleTypes || {}).filter(([n]) => !roleMap[n]?.generic).length > 5 && <span>等 {Object.entries(p.roleTypes || {}).filter(([n]) => !roleMap[n]?.generic).length} 位</span>}
           </span>
         </div>
         {(p.melodies || []).length > 0 && (

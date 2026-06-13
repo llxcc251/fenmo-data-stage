@@ -46,7 +46,7 @@ function getColorLabel(role) {
 }
 
 export default function FaceGenerator() {
-  const { roles, plays, loaded, loadData } = useStore()
+  const { roles, plays, loaded, error, loadData } = useStore()
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const selectedRole = searchParams.get('role') || ''
@@ -55,7 +55,7 @@ export default function FaceGenerator() {
   const [searchRole, setSearchRole] = useState('')
 
   const coloredRoles = useMemo(() => {
-    return roles.filter(r => r.type).sort((a, b) => {
+    return roles.filter(r => r.type && !r.generic).sort((a, b) => {
       const order = ['净', '丑', '生', '旦']
       return (order.indexOf(a.category) - order.indexOf(b.category)) || (a.name.localeCompare(b.name))
     })
@@ -86,8 +86,17 @@ export default function FaceGenerator() {
   }
 
   if (!loaded) return (
-    <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-      <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+    <div className="flex flex-col items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
+      {error ? (
+        <>
+          <p className="text-vermillion-500 text-sm mb-2">◆</p>
+          <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
+          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
+          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+        </>
+      ) : (
+        <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
+      )}
     </div>
   )
 
@@ -115,6 +124,9 @@ export default function FaceGenerator() {
                          focus:outline-none focus:border-gold-500/50 mb-3 transition-colors"
             />
             <div className="max-h-80 overflow-y-auto space-y-0.5">
+              {filteredRoles.length > 100 && (
+                <p className="text-ink-600 text-[10px] px-3 pb-1">前 100 个角色，输入名称搜索更多</p>
+              )}
               {filteredRoles.slice(0, 100).map(r => (
                 <button
                   key={r.name}
