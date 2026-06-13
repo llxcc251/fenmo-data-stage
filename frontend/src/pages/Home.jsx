@@ -1,28 +1,75 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
+const FLOATING_CHARS = ['京', '剧', '生', '旦', '净', '丑', '西皮', '二黄', '粉墨', '锣鼓']
+
 export default function Home() {
+  const particles = useMemo(() => {
+    return FLOATING_CHARS.map((ch, i) => ({
+      char: ch,
+      x: Math.random() * 80 + 10,
+      delay: Math.random() * 8,
+      duration: 10 + Math.random() * 8,
+      size: 12 + Math.random() * 16,
+      opacity: 0.04 + Math.random() * 0.06,
+    }))
+  }, [])
+
   return (
-    <div className="flex flex-col items-center justify-center text-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
+    <div className="flex flex-col items-center justify-center text-center overflow-hidden" style={{ minHeight: 'calc(100vh - 3rem)' }}>
+      {/* Floating particles */}
+      {particles.map((p, i) => (
+        <motion.span
+          key={i}
+          className="absolute pointer-events-none select-none font-title"
+          style={{ left: `${p.x}%`, fontSize: p.size }}
+          initial={{ opacity: 0, y: '100vh' }}
+          animate={{ opacity: [0, p.opacity, p.opacity, 0], y: ['100vh', '-10vh'] }}
+          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: 'linear' }}
+        >
+          {p.char}
+        </motion.span>
+      ))}
+
       {/* Stage spotlight effect */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[60vw] h-[50vh] pointer-events-none"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        className="fixed top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[60vh] pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(245,158,11,0.06) 0%, rgba(220,38,38,0.03) 30%, transparent 60%)',
+          background: 'radial-gradient(ellipse at center, rgba(245,158,11,0.08) 0%, rgba(220,38,38,0.04) 30%, transparent 60%)',
         }}
       />
 
-      {/* Decorative top curtain hints */}
-      <div className="fixed top-0 left-0 right-0 h-16 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-0 w-1/4 h-full bg-gradient-to-r from-vermillion-900/20 to-transparent" />
-        <div className="absolute top-0 right-0 w-1/4 h-full bg-gradient-to-l from-vermillion-900/20 to-transparent" />
-        <div className="absolute top-0 left-1/4 right-1/4 h-1 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent" />
-      </div>
+      {/* Curtain pull-apart */}
+      <motion.div
+        initial={{ scaleX: 1 }}
+        animate={{ scaleX: 0 }}
+        transition={{ duration: 1.2, ease: [0.7, 0, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 h-full pointer-events-none origin-left"
+        style={{
+          background: 'linear-gradient(to right, #1A1A1A 0%, #2A1A1A 40%, #2A1A1A 60%, #1A1A1A 100%)',
+          transformOrigin: 'left',
+        }}
+      />
+      <motion.div
+        initial={{ scaleX: 1 }}
+        animate={{ scaleX: 0 }}
+        transition={{ duration: 1.2, ease: [0.7, 0, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 h-full pointer-events-none origin-right"
+        style={{
+          background: 'linear-gradient(to left, #1A1A1A 0%, #2A1A1A 40%, #2A1A1A 60%, #1A1A1A 100%)',
+          transformOrigin: 'right',
+        }}
+      />
 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="space-y-8"
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="space-y-8 relative z-10"
       >
         {/* Stage curtain separator line */}
         <motion.div

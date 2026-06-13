@@ -5,9 +5,9 @@ const navItems = [
   { path: '/overview', label: '数据总览', sub: '一桌二椅' },
   { path: '/roles', label: '角色之相', sub: '生旦净丑' },
   { path: '/melody', label: '声腔之流', sub: '西皮二黄' },
-  { path: '/plays', label: '剧目之脉', sub: '宇宙图谱' },
   { path: '/heritage', label: '传承之路', sub: '地域流派' },
   { path: '/face-generator', label: '脸谱生成', sub: '数据入谱' },
+  { path: '/plays', label: '剧目之脉', sub: '宇宙图谱' },
 ]
 
 export default function Navigation() {
@@ -35,7 +35,7 @@ export default function Navigation() {
             className={({ isActive }) =>
               `relative flex items-center gap-3 px-6 py-3 text-sm transition-all duration-300 group
               ${isActive
-                ? 'text-gold-400 bg-gradient-to-r from-gold-500/8 to-transparent'
+                ? 'text-gold-400 bg-gradient-to-r from-gold-500/15 to-transparent'
                 : 'text-jade-200/40 hover:text-jade-200/70 hover:bg-white/[0.02]'
               }`
             }
@@ -43,7 +43,7 @@ export default function Navigation() {
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-gold-500 via-vermillion-600 to-gold-500 rounded-r" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-10 bg-gradient-to-b from-gold-500 via-vermillion-600 to-gold-500 rounded-r shadow-lg shadow-gold-500/30" />
                 )}
                 <span className={`transition-transform duration-300 ${isActive ? 'translate-x-1' : 'group-hover:translate-x-1'}`}>
                   {item.label}

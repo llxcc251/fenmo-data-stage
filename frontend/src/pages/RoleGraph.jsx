@@ -6,12 +6,28 @@ import ReactEChartsCore from 'echarts-for-react'
 
 const CATEGORY_COLORS = { '生': '#6366F1', '旦': '#EF4444', '净': '#F59E0B', '丑': '#6B7280' }
 const CATEGORIES = ['生', '旦', '净', '丑']
+const DYNASTY_ORDER = ['商','周','春秋','战国','秦','汉','三国','晋','南北朝','隋','唐','五代','宋','北宋','南宋','元','明','清','历史朝代不详']
 
 export default function RoleGraph() {
-  const { roles, relations, loaded, error, loadData } = useStore()
+  const { plays, roles, relations, loaded, error, loadData } = useStore()
   const navigate = useNavigate()
   const [category, setCategory] = useState('生')
+  const [dynasty, setDynasty] = useState('三国')
+  const [tab, setTab] = useState('hangdang')
   useEffect(() => { if (!loaded) loadData() }, [loaded, loadData])
+
+  // Roles from plays of the selected dynasty
+  const dynastyRoles = useMemo(() => {
+    if (!plays.length || !roles.length) return []
+    const dynastyPlayIds = new Set(plays.filter(p => p.dynasty === dynasty).map(p => p.id))
+    const roleNames = new Set()
+    plays.forEach(p => {
+      if (dynastyPlayIds.has(p.id)) {
+        Object.keys(p.roleTypes || {}).forEach(r => roleNames.add(r))
+      }
+    })
+    return roles.filter(r => roleNames.has(r.name) && !r.generic)
+  }, [plays, roles, dynasty])
 
   const filteredRoles = useMemo(() => {
     if (!roles.length) return []
@@ -92,64 +108,96 @@ export default function RoleGraph() {
         <p className="text-ink-500 text-xs mt-1 ml-4">行当分布与角色类型</p>
       </div>
 
-      <div className="opera-card p-4">
-        <h3 className="section-header text-xs text-jade-200/50 mb-3">
-          行当层级 · Sunburst<span className="text-ink-500 ml-1">(内环=四大行当，外环=子类，点击钻取)</span>
-        </h3>
-        <ReactEChartsCore option={sunburstOption} style={{ height: 480 }} />
+      {/* Tab switcher */}
+      <div className="flex gap-1 border-b border-ink-700/30 pb-2">
+        {[
+          { key: 'hangdang', label: '行当分布' },
+          { key: 'network', label: '角色同现' },
+        ].map(t => (
+          <button key={t.key} onClick={() => setTab(t.key)}
+            className={`px-4 py-1.5 text-xs rounded-t transition-colors ${
+              tab === t.key
+                ? 'text-gold-400 bg-gold-500/10 border border-b-0 border-ink-700/30'
+                : 'text-jade-200/40 hover:text-jade-200/60'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
-      <div className="opera-card p-4">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="section-header text-xs text-jade-200/50">
-            角色同现网络 · D3 Force<span className="text-ink-500 ml-1">(双击查看脸谱)</span>
-          </h3>
-          <div className="flex gap-1">
-            {CATEGORIES.map(c => (
-              <button
-                key={c}
-                onClick={() => setCategory(c)}
-                className={`px-3 py-1 text-xs rounded transition-colors ${
-                  category === c
-                    ? 'bg-gold-500/15 text-gold-400 border border-gold-500/30'
-                    : 'text-jade-200/40 border border-transparent hover:text-jade-200/60 hover:bg-ink-700/30'
-                }`}
-              >
-                {c}
-              </button>
-            ))}
+      {/* Tab: 行当分布 */}
+      {tab === 'hangdang' && (
+        <div className="opera-card p-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+              <ReactEChartsCore option={sunburstOption} style={{ height: 440 }} />
+            </div>
+            <div>
+              <div className="flex gap-1 mb-3">
+                {CATEGORIES.map(c => (
+                  <button key={c}
+                    onClick={() => setCategory(c)}
+                    className={`px-3 py-1 text-xs rounded transition-colors ${
+                      category === c
+                        ? 'bg-gold-500/15 text-gold-400 border border-gold-500/30'
+                        : 'text-jade-200/40 border border-transparent hover:text-jade-200/60 hover:bg-ink-700/30'
+                    }`}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+              <div className="space-y-1 max-h-[380px] overflow-y-auto">
+                {filteredRoles.length > 200 && (
+                  <p className="text-ink-600 text-[10px]">前 200 个角色，共 {filteredRoles.length} 个</p>
+                )}
+                {filteredRoles.slice(0, 200).map(r => (
+                  <button key={r.name} onClick={() => goToRole(r.name)}
+                    className="w-full text-left text-xs text-jade-200/40 px-3 py-1.5 bg-ink-700/30 rounded hover:bg-ink-700/50 hover:text-gold-400 transition-colors"
+                  >
+                    {r.name}
+                    <span className="text-ink-500 ml-1">({r.type})</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-        <p className="text-ink-500 text-[10px] mb-2">
-          显示 {category}行 Top 50 角色同现关系
-        </p>
-        <ForceGraph
-          selectedRoles={filteredRoles}
-          relations={relations}
-          onNodeClick={goToRole}
-        />
-      </div>
+      )}
 
-      {/* role list */}
-      <div className="opera-card p-4">
-        <h3 className="section-header text-xs text-jade-200/50 mb-3">
-          {category}行角色列表<span className="text-ink-500 ml-1">（点击查看脸谱）</span>
-        </h3>
-        <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-2 max-h-80 overflow-y-auto">
-          {filteredRoles.length > 200 && (
-            <p className="col-span-full text-ink-600 text-[10px] px-1">前 200 个角色，共 {filteredRoles.length} 个（{category}行）</p>
-          )}
-          {filteredRoles.slice(0, 200).map(r => (
-            <button
-              key={r.name}
-              onClick={() => goToRole(r.name)}
-              className="text-xs text-jade-200/40 px-2 py-1 bg-ink-700/30 rounded hover:bg-ink-700/50 hover:text-gold-400 transition-colors text-left"
-            >
-              {r.name}
-            </button>
-          ))}
+      {/* Tab: 角色同现 */}
+      {tab === 'network' && (
+        <div className="opera-card p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="section-header text-xs text-jade-200/50">
+              按朝代同现<span className="text-ink-500 ml-1">(双击查看脸谱)</span>
+            </h3>
+            <div className="flex gap-1">
+              {DYNASTY_ORDER.filter(d => d !== '历史朝代不详' && plays.some(p => p.dynasty === d)).map(d => (
+                <button key={d}
+                  onClick={() => setDynasty(d)}
+                  className={`px-2 py-1 text-[10px] rounded transition-colors ${
+                    dynasty === d
+                      ? 'bg-gold-500/15 text-gold-400 border border-gold-500/30'
+                      : 'text-jade-200/40 border border-transparent hover:text-jade-200/60 hover:bg-ink-700/30'
+                  }`}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+          </div>
+          <p className="text-ink-500 text-[10px] mb-2">
+            {dynasty} · {dynastyRoles.length} 个角色，节点大小=出演剧目数，连线粗细=同台频率，颜色按行当区分
+          </p>
+          <ForceGraph
+            selectedRoles={dynastyRoles}
+            relations={relations}
+            onNodeClick={goToRole}
+          />
         </div>
-      </div>
+      )}
     </div>
   )
 }

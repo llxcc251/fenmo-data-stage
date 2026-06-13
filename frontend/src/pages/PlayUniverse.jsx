@@ -26,6 +26,7 @@ export default function PlayUniverse() {
   const [value, setValue] = useState(() => {
     return searchParams.get('dynasty') || searchParams.get('genre') || searchParams.get('melody') || ''
   })
+  const [showAllGroups, setShowAllGroups] = useState(false)
 
   useEffect(() => { if (!loaded) loadData() }, [loaded, loadData])
 
@@ -126,7 +127,7 @@ export default function PlayUniverse() {
         <span className="text-jade-200/50 text-xs">按</span>
         <div className="flex gap-1">
           {DIMS.map(d => (
-            <button key={d.key} onClick={() => { setDim(d.key); setValue('') }}
+            <button key={d.key} onClick={() => { setDim(d.key); setValue(''); setShowAllGroups(false) }}
               className={`px-3 py-1.5 text-xs rounded transition-colors ${
                 dim === d.key
                   ? 'bg-gold-500/15 text-gold-400 border border-gold-500/30'
@@ -143,7 +144,7 @@ export default function PlayUniverse() {
         </select>
         <span className="text-ink-500 text-[10px]">{filtered.length} 部</span>
         {(search || value) && (
-          <button onClick={() => { setSearch(''); setValue('') }}
+          <button onClick={() => { setSearch(''); setValue(''); setShowAllGroups(false) }}
             className="text-[10px] text-ink-500 hover:text-jade-200/60 transition-colors ml-auto">清除</button>
         )}
       </div>
@@ -169,7 +170,7 @@ export default function PlayUniverse() {
             if (dim === 'dynasty') return filtered.some(p => p.dynasty === v)
             if (dim === 'genre') return filtered.some(p => (p.genres || []).includes(v))
             return filtered.some(p => (p.melodies || []).includes(v))
-          }).slice(0, search ? values.length : 15).map(v => {
+          }).slice(0, showAllGroups || search ? values.length : 15).map(v => {
             let items
             if (dim === 'dynasty') items = filtered.filter(p => p.dynasty === v)
             else if (dim === 'genre') items = filtered.filter(p => (p.genres || []).includes(v))
@@ -183,7 +184,7 @@ export default function PlayUniverse() {
                 </button>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {items.slice(0, 6).map(p => (
-                    <PlayCard key={p.id} play={p} roleMap={roleMap} navigate={navigate} />
+                    <PlayCard key={p.id} play={p} roleMap={roleMap} navigate={navigate} setDim={setDim} setValue={setValue} />
                   ))}
                 </div>
                 {items.length > 6 && (
@@ -195,6 +196,12 @@ export default function PlayUniverse() {
               </div>
             )
           })}
+          {!showAllGroups && !search && values.length > 15 && (
+            <button onClick={() => setShowAllGroups(true)}
+              className="w-full text-center py-3 text-[10px] text-gold-400/60 hover:text-gold-400 border border-dashed border-ink-700/30 rounded-lg transition-colors">
+              展开全部 {values.length} 组
+            </button>
+          )}
         </div>
       ) : (
         /* Specific value selected: show plays grid */
@@ -202,7 +209,7 @@ export default function PlayUniverse() {
           <p className="section-header text-xs text-jade-200/50 mb-3">{value} ({filtered.length} 部)</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {filtered.map(p => (
-              <PlayCard key={p.id} play={p} roleMap={roleMap} navigate={navigate} />
+              <PlayCard key={p.id} play={p} roleMap={roleMap} navigate={navigate} setDim={setDim} setValue={setValue} />
             ))}
           </div>
         </div>
@@ -211,18 +218,25 @@ export default function PlayUniverse() {
   )
 }
 
-function PlayCard({ play: p, roleMap, navigate }) {
+function PlayCard({ play: p, roleMap, navigate, setDim, setValue }) {
+  const filterBy = (dim, value) => { setDim(dim); setValue(value) }
   return (
     <div className="opera-card p-4 group">
       <div className="flex items-start justify-between mb-2">
         <h3 className="font-title text-jade-100 text-sm group-hover:text-gold-400 transition-colors">{p.title}</h3>
         {p.dynasty && (
-          <span className="text-[10px] text-gold-400/60 px-2 py-0.5 bg-gold-500/5 rounded">{p.dynasty}</span>
+          <button onClick={() => filterBy('dynasty', p.dynasty)}
+            className="text-[10px] text-gold-400/60 px-2 py-0.5 bg-gold-500/5 rounded hover:bg-gold-500/15 hover:text-gold-400 transition-colors">
+            {p.dynasty}
+          </button>
         )}
       </div>
       <div className="flex flex-wrap gap-1">
         {(p.genres || []).slice(0, 3).map(g => (
-          <span key={g} className="text-[10px] text-ink-500 px-1.5 py-0.5 bg-ink-700/30 rounded">{g}</span>
+          <button key={g} onClick={() => filterBy('genre', g)}
+            className="text-[10px] text-ink-500 px-1.5 py-0.5 bg-ink-700/30 rounded hover:bg-ink-700/50 hover:text-jade-200/60 transition-colors">
+            {g}
+          </button>
         ))}
       </div>
       <p className="text-ink-500 text-[10px] mt-2 line-clamp-2 leading-relaxed">
@@ -243,7 +257,10 @@ function PlayCard({ play: p, roleMap, navigate }) {
           </span>
         </div>
         {(p.melodies || []).length > 0 && (
-          <div className="flex items-center gap-1">{p.melodies.map(m => <span key={m} className="text-ink-500">{m}</span>)}</div>
+          <div className="flex flex-wrap gap-1">{p.melodies.map(m => (
+            <button key={m} onClick={() => filterBy('melody', m)}
+              className="text-[10px] text-ink-500 hover:text-jade-200/60 transition-colors">{m}</button>
+          ))}</div>
         )}
       </div>
       {p.id && (
