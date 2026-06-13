@@ -24,6 +24,7 @@ Flask 运行在 http://localhost:5000
 新开一个终端：
 
 ```bash
+cd frontend
 npm install
 npm run dev
 ```
