@@ -4,7 +4,6 @@ import useStore from '../store/useStore'
 import ForceGraph from '../components/ForceGraph'
 import ReactEChartsCore from 'echarts-for-react'
 
-const CATEGORY_LABELS = { '生': '生 — Male', '旦': '旦 — Female', '净': '净 — Painted Face', '丑': '丑 — Clown' }
 const CATEGORY_COLORS = { '生': '#6366F1', '旦': '#EF4444', '净': '#F59E0B', '丑': '#6B7280' }
 const CATEGORIES = ['生', '旦', '净', '丑']
 
@@ -45,18 +44,6 @@ export default function RoleGraph() {
     </div>
   )
 
-  const catOption = {
-    tooltip: { trigger: 'item', backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
-    series: [{
-      type: 'pie', radius: ['40%', '70%'],
-      data: Object.entries(stats.byCategory).map(([k, v]) => ({
-        name: CATEGORY_LABELS[k] || k, value: v, itemStyle: { color: CATEGORY_COLORS[k] || '#6B7280' }
-      })),
-      label: { color: '#D4D4C8', fontSize: 11, formatter: '{b}\n{c}' },
-      labelLine: { lineStyle: { color: '#3A3A3A' } },
-    }]
-  }
-
   const sunburstData = CATEGORIES.map(cat => ({
     name: cat,
     itemStyle: { color: CATEGORY_COLORS[cat] },
@@ -78,8 +65,8 @@ export default function RoleGraph() {
       type: 'sunburst', data: sunburstData, radius: ['0%', '90%'],
       sort: 'desc', emphasis: { focus: 'descendant' },
       levels: [
-        {}, { r0: '10%', r: '40%', label: { color: '#D4D4C8', fontSize: 12, fontWeight: 'bold' } },
-        { r0: '40%', r: '70%', label: { color: '#D4D4C8', fontSize: 9 } },
+        {}, { r0: '10%', r: '45%', label: { color: '#D4D4C8', fontSize: 14, fontWeight: 'bold' } },
+        { r0: '45%', r: '75%', label: { color: '#D4D4C8', fontSize: 11 } },
       ],
       label: { rotate: 'tangential' },
       nodeClick: 'rootNode',
@@ -96,17 +83,11 @@ export default function RoleGraph() {
         <p className="text-ink-500 text-xs mt-1 ml-4">行当分布与角色类型</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="opera-card p-4">
-          <h3 className="section-header text-xs text-jade-200/50 mb-3">四大行当</h3>
-          <ReactEChartsCore option={catOption} style={{ height: 280 }} />
-        </div>
-        <div className="opera-card p-4">
-          <h3 className="section-header text-xs text-jade-200/50 mb-3">
-            行当层级 · Sunburst<span className="text-ink-500 ml-1">(点击钻取)</span>
-          </h3>
-          <ReactEChartsCore option={sunburstOption} style={{ height: 280 }} />
-        </div>
+      <div className="opera-card p-4">
+        <h3 className="section-header text-xs text-jade-200/50 mb-3">
+          行当层级 · Sunburst<span className="text-ink-500 ml-1">(内环=四大行当，外环=子类，点击钻取)</span>
+        </h3>
+        <ReactEChartsCore option={sunburstOption} style={{ height: 480 }} />
       </div>
 
       <div className="opera-card p-4">

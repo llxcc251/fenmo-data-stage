@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import useStore from '../store/useStore'
 
@@ -52,12 +52,20 @@ export default function FaceGenerator() {
   const selectedRole = searchParams.get('role') || ''
   useEffect(() => { if (!loaded) loadData() }, [loaded, loadData])
 
+  const [searchRole, setSearchRole] = useState('')
+
   const coloredRoles = useMemo(() => {
     return roles.filter(r => r.type).sort((a, b) => {
       const order = ['净', '丑', '生', '旦']
       return (order.indexOf(a.category) - order.indexOf(b.category)) || (a.name.localeCompare(b.name))
     })
   }, [roles])
+
+  const filteredRoles = useMemo(() => {
+    if (!searchRole) return coloredRoles
+    const q = searchRole.toLowerCase()
+    return coloredRoles.filter(r => r.name.toLowerCase().includes(q))
+  }, [coloredRoles, searchRole])
 
   const currentRole = useMemo(() => {
     if (!selectedRole) return null
@@ -101,19 +109,13 @@ export default function FaceGenerator() {
         <div className="lg:col-span-1">
           <div className="opera-card p-4">
             <h3 className="section-header text-xs text-jade-200/50 mb-3">选择角色</h3>
-            <select
-              value={selectedRole}
-              onChange={e => setRole(e.target.value)}
-              className="w-full bg-ink-700/60 border border-ink-600/30 rounded px-3 py-2 text-sm text-jade-100
+            <input type="text" placeholder="搜索角色..." value={searchRole}
+              onChange={e => setSearchRole(e.target.value)}
+              className="w-full bg-ink-700/60 border border-ink-600/30 rounded px-3 py-2 text-sm text-jade-100 placeholder:text-ink-500
                          focus:outline-none focus:border-gold-500/50 mb-3 transition-colors"
-            >
-              <option value="">-- 选择角色 --</option>
-              {coloredRoles.slice(0, 200).map(r => (
-                <option key={r.name} value={r.name}>{r.name} ({r.type})</option>
-              ))}
-            </select>
+            />
             <div className="max-h-80 overflow-y-auto space-y-0.5">
-              {coloredRoles.slice(0, 100).map(r => (
+              {filteredRoles.slice(0, 100).map(r => (
                 <button
                   key={r.name}
                   onClick={() => setRole(r.name)}

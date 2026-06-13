@@ -32,7 +32,7 @@ export default function Overview() {
 
   const dynastyClick = useCallback((params) => {
     const dynasty = params.name
-    if (dynasty && dynasty !== '未知') navigate(`/plays?dynasty=${encodeURIComponent(dynasty)}`)
+    if (dynasty) navigate(`/plays?dynasty=${encodeURIComponent(dynasty)}`)
   }, [navigate])
 
   const genreClick = useCallback((params) => {
@@ -61,7 +61,7 @@ export default function Overview() {
     grid: { left: 50, right: 16, top: 8, bottom: 28 },
     xAxis: {
       type: 'category',
-      data: Object.keys(stats.dynastyCount),
+      data: Object.entries(stats.dynastyCount).sort((a, b) => b[1] - a[1]).map(([k]) => k),
       axisLabel: { color: '#6B7280', fontSize: 10 },
       axisLine: { lineStyle: { color: '#3A3A3A' } },
     },
@@ -72,7 +72,7 @@ export default function Overview() {
     },
     series: [{
       type: 'bar',
-      data: Object.values(stats.dynastyCount),
+      data: Object.entries(stats.dynastyCount).sort((a, b) => b[1] - a[1]).map(([, v]) => v),
       itemStyle: {
         color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: '#F59E0B' }, { offset: 1, color: '#DC2626' }] },
         borderRadius: [2, 2, 0, 0],
@@ -86,11 +86,11 @@ export default function Overview() {
     tooltip: { trigger: 'item', backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
     series: [{
       type: 'pie',
-      radius: ['30%', '60%'],
+      radius: ['20%', '70%'],
       center: ['50%', '50%'],
       data: Object.entries(stats.genreCount).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name, value]) => ({ name, value })),
-      label: { color: '#D4D4C8', fontSize: 10, formatter: '{b}: {d}%' },
-      labelLine: { lineStyle: { color: '#3A3A3A' } },
+      label: { color: '#D4D4C8', fontSize: 13, formatter: '{b}: {d}%' },
+      labelLine: { length: 50, length2: 60, lineStyle: { color: '#3A3A3A' } },
       itemStyle: { borderRadius: 4, cursor: 'pointer' },
       emphasis: { itemStyle: { opacity: 0.8 } },
       color: ['#F59E0B', '#DC2626', '#6366F1', '#6B7280', '#EF4444', '#FBBF24', '#818CF8', '#D4D4C8'],
@@ -118,14 +118,14 @@ export default function Overview() {
       </div>
 
       {/* charts - clickable */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="space-y-4">
         <div className="opera-card p-4">
           <h3 className="section-header text-xs text-jade-200/50 mb-3">朝代分布（点击查看剧目）</h3>
-          <ReactEChartsCore option={dynastyOption} style={{ height: 200 }} onEvents={{ click: dynastyClick }} />
+          <ReactEChartsCore option={dynastyOption} style={{ height: 320 }} onEvents={{ click: dynastyClick }} />
         </div>
         <div className="opera-card p-4">
           <h3 className="section-header text-xs text-jade-200/50 mb-3">题材分布（点击查看剧目）</h3>
-          <ReactEChartsCore option={genreOption} style={{ height: 200 }} onEvents={{ click: genreClick }} />
+          <ReactEChartsCore option={genreOption} style={{ height: 400 }} onEvents={{ click: genreClick }} />
         </div>
       </div>
     </div>

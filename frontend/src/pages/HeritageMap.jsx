@@ -3,14 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import useStore from '../store/useStore'
 import ReactEChartsCore from 'echarts-for-react'
 
-const SOURCE_COLORS = {
-  '振飞曲谱': '#6366F1', '关羽戏集：李洪春演出本': '#EF4444',
-  '侯玉山昆曲谱': '#F59E0B', '汪笑侬戏曲集': '#8B5CF6',
-  '程砚秋演出剧本选集': '#EC4899', '唐韵笙舞台艺术集': '#14B8A6',
-  '萧长华演出剧本选集': '#F97316', '梅兰芳演出剧本选集': '#DC2626',
-  '周信芳演出剧本新编': '#0EA5E9',
-}
-
 const DYNASTY_ORDER = ['商', '周', '春秋', '战国', '秦', '汉', '三国', '晋', '南北朝',
                        '隋', '唐', '五代', '宋', '元', '明', '清']
 
@@ -117,29 +109,61 @@ export default function HeritageMap() {
     }],
   }) : null, [fullData, zoomRange])
 
-  const sourceOption = useMemo(() => data ? ({
-    tooltip: { trigger: 'item', backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
-    series: [{
-      type: 'pie', radius: ['20%', '50%'],
-      data: Object.entries(data.sourceCount)
-        .filter(([k]) => k !== '未标注来源')
-        .sort((a, b) => b[1] - a[1])
-        .map(([k, v]) => ({ name: k, value: v, itemStyle: { color: SOURCE_COLORS[k] || '#6B7280' } })),
-      label: { color: '#D4D4C8', fontSize: 10 },
-      labelLine: { lineStyle: { color: '#3A3A3A' } },
-    }],
-  }) : null, [data])
+  // Genre-by-dynasty heatmap data
+  const genreHeatmapData = useMemo(() => {
+    if (!plays.length) return null
+    const dg = {}
+    plays.forEach(p => {
+      const d = p.dynasty || '未知'
+      if (!dg[d]) dg[d] = {}
+      ;(p.genres || ['其他']).forEach(g => { dg[d][g] = (dg[d][g] || 0) + 1 })
+    })
+    // Top dynasties (filtered by brush if active)
+    let topDyns = Object.keys(dg).sort((a, b) => {
+      const order = ['未知','商','周','春秋','战国','秦','汉','三国','晋','南北朝','隋','唐','五代','宋','元','明','清']
+      return (order.indexOf(a) !== -1 ? order.indexOf(a) : 99) - (order.indexOf(b) !== -1 ? order.indexOf(b) : 99)
+    }).filter(d => d !== '神话')
+    if (brushedDynasties) topDyns = topDyns.filter(d => brushedDynasties.includes(d))
+    // Top genres across all dynasties
+    const genreTotal = {}
+    Object.values(dg).forEach(gd => {
+      Object.entries(gd).forEach(([g, c]) => { genreTotal[g] = (genreTotal[g] || 0) + c })
+    })
+    const topGenres = Object.entries(genreTotal).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([g]) => g)
 
-  if (!data || !timelineOption) return (
+    const heatData = []
+    topDyns.forEach((d, di) => {
+      topGenres.forEach((g, gi) => {
+        heatData.push([di, gi, dg[d][g] || 0])
+      })
+    })
+    return { dyns: topDyns, genres: topGenres, data: heatData }
+  }, [plays, brushedDynasties])
+
+  // Heatmap option
+  const heatmapOption = useMemo(() => {
+    if (!genreHeatmapData) return null
+    const maxV = Math.max(...genreHeatmapData.data.map(d => d[2]))
+    return {
+      tooltip: {
+        position: 'top',
+        backgroundColor: '#1A1A1A', borderColor: '#3A3A3A',
+        textStyle: { color: '#D4D4C8', fontSize: 11 },
+        formatter: (p) => `${genreHeatmapData.genres[p.value[1]]} · ${genreHeatmapData.dyns[p.value[0]]}<br/>${p.value[2]} 部`,
+      },
+      grid: { left: 80, right: 40, top: 8, bottom: 40 },
+      xAxis: { type: 'category', data: genreHeatmapData.dyns, axisLabel: { color: '#6B7280', fontSize: 9 }, axisLine: { lineStyle: { color: '#3A3A3A' } }, splitArea: { show: true } },
+      yAxis: { type: 'category', data: genreHeatmapData.genres, axisLabel: { color: '#6B7280', fontSize: 9 }, axisLine: { lineStyle: { color: '#3A3A3A' } }, splitArea: { show: true } },
+      visualMap: { min: 0, max: maxV, calculable: true, orient: 'horizontal', left: 'center', bottom: 0, inRange: { color: ['#1A1A1A', '#DC2626', '#F59E0B'] }, textStyle: { color: '#6B7280', fontSize: 9 } },
+      series: [{ type: 'heatmap', data: genreHeatmapData.data, label: { show: true, color: '#D4D4C8', fontSize: 8 }, emphasis: { itemStyle: { shadowBlur: 10 } } }],
+    }
+  }, [genreHeatmapData])
+
+  if (!timelineOption) return (
     <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
       <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
     </div>
   )
-
-  const labeledTotal = Object.entries(data.sourceCount)
-    .filter(([k]) => k !== '未标注来源')
-    .reduce((s, [, v]) => s + v, 0)
-  const unlabeledTotal = data.sourceCount['未标注来源'] || 0
 
   const resetBrush = () => {
     setBrushedDynasties(null)
@@ -171,50 +195,23 @@ export default function HeritageMap() {
         </div>
       )}
 
-      <div className="opera-card p-3 flex items-center gap-2">
-        <span className="text-vermillion-600/60 text-xs">◈</span>
-        <p className="text-ink-500 text-[10px]">
-          数据集共 <span className="text-jade-200/60">{plays.length}</span> 部剧本，
-          其中 <span className="text-jade-200/60">{unlabeledTotal}</span> 部未记录来源，
-          仅 <span className="text-gold-400">{labeledTotal}</span> 部归属明确流派整理本
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="opera-card p-4">
-          <h3 className="section-header text-xs text-jade-200/50 mb-3">
-            剧目时代趋势<span className="text-ink-500 ml-1">（点击朝代查看剧目 · 拖拽滑块刷选）</span>
-          </h3>
-          <ReactEChartsCore
-            ref={timelineRef}
-            option={timelineOption}
-            style={{ height: 280 }}
-            onEvents={{ ...onEvents, click: timelineClick }}
-          />
-        </div>
-        <div className="opera-card p-4">
-          <h3 className="section-header text-xs text-jade-200/50 mb-3">
-            剧本来源{brushedDynasties ? '（已筛选）' : ''}
-          </h3>
-          <ReactEChartsCore option={sourceOption} style={{ height: 240 }} />
-        </div>
-      </div>
-
+      {/* Row 1: Timeline full width */}
       <div className="opera-card p-4">
         <h3 className="section-header text-xs text-jade-200/50 mb-3">
-          重要流派整理本{brushedDynasties ? '（已筛选）' : ''}
+          剧目时代趋势<span className="text-ink-500 ml-1">（点击朝代查看剧目 · 拖拽滑块刷选）</span>
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-          {Object.entries(data.sourceCount)
-            .filter(([k]) => k !== '未标注来源')
-            .sort((a, b) => b[1] - a[1])
-            .map(([name, count]) => (
-              <div key={name} className="flex items-center justify-between bg-ink-700/30 rounded px-3 py-2 hover:bg-ink-700/50 transition-colors">
-                <span className="text-xs text-jade-200/60">{name}</span>
-                <span className="font-number text-gold-400 text-xs ml-2">{count}</span>
-              </div>
-            ))}
-        </div>
+        <ReactEChartsCore
+          ref={timelineRef}
+          option={timelineOption}
+          style={{ height: 300 }}
+          onEvents={{ ...onEvents, click: timelineClick }}
+        />
+      </div>
+
+      {/* Row 2: Heatmap full width */}
+      <div className="opera-card p-4">
+        <h3 className="section-header text-xs text-jade-200/50 mb-3">题材 x 朝代 热度</h3>
+        <ReactEChartsCore option={heatmapOption} style={{ height: 340 }} />
       </div>
     </div>
   )
