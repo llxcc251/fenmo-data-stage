@@ -50,7 +50,7 @@ export default function Home() {
         transition={{ duration: 1.2, ease: [0.7, 0, 0.3, 1] }}
         className="fixed top-0 left-0 right-0 h-full pointer-events-none origin-left"
         style={{
-          background: 'linear-gradient(to right, #1A1A1A 0%, #2A1A1A 40%, #2A1A1A 60%, #1A1A1A 100%)',
+          background: 'linear-gradient(to right, #F0EBE0 0%, #E5DFD0 40%, #E5DFD0 60%, #F0EBE0 100%)',
           transformOrigin: 'left',
         }}
       />
@@ -60,7 +60,7 @@ export default function Home() {
         transition={{ duration: 1.2, ease: [0.7, 0, 0.3, 1] }}
         className="fixed top-0 left-0 right-0 h-full pointer-events-none origin-right"
         style={{
-          background: 'linear-gradient(to left, #1A1A1A 0%, #2A1A1A 40%, #2A1A1A 60%, #1A1A1A 100%)',
+          background: 'linear-gradient(to left, #F0EBE0 0%, #E5DFD0 40%, #E5DFD0 60%, #F0EBE0 100%)',
           transformOrigin: 'right',
         }}
       />
@@ -118,7 +118,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.1 }}
-          className="text-jade-200/40 text-sm tracking-wider max-w-md mx-auto leading-relaxed"
+          className="text-ink-500/50 text-sm tracking-wider max-w-md mx-auto leading-relaxed"
         >
           以数据为谱，以屏幕为台，让京剧在数字空间中重新开场
         </motion.p>
@@ -155,7 +155,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.6 }}
-          className="text-ink-600 text-[10px] tracking-[0.3em] pt-4"
+          className="text-ink-500 text-[10px] tracking-[0.3em] pt-4"
         >
           1473 部剧目 · 3576 个角色 · 10 种声腔
         </motion.p>

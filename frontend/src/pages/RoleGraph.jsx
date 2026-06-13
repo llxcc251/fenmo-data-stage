@@ -118,7 +118,7 @@ export default function RoleGraph() {
             className={`px-4 py-1.5 text-xs rounded-t transition-colors ${
               tab === t.key
                 ? 'text-gold-400 bg-gold-500/10 border border-b-0 border-ink-700/30'
-                : 'text-jade-200/40 hover:text-jade-200/60'
+                : 'text-ink-600/50 hover:text-ink-600/70'
             }`}
           >
             {t.label}
@@ -141,7 +141,7 @@ export default function RoleGraph() {
                     className={`px-3 py-1 text-xs rounded transition-colors ${
                       category === c
                         ? 'bg-gold-500/15 text-gold-400 border border-gold-500/30'
-                        : 'text-jade-200/40 border border-transparent hover:text-jade-200/60 hover:bg-ink-700/30'
+                        : 'text-ink-600/50 border border-transparent hover:text-ink-600/70 hover:bg-paper-200/70'
                     }`}
                   >
                     {c}
@@ -154,7 +154,7 @@ export default function RoleGraph() {
                 )}
                 {filteredRoles.slice(0, 200).map(r => (
                   <button key={r.name} onClick={() => goToRole(r.name)}
-                    className="w-full text-left text-xs text-jade-200/40 px-3 py-1.5 bg-ink-700/30 rounded hover:bg-ink-700/50 hover:text-gold-400 transition-colors"
+                    className="w-full text-left text-xs text-ink-600/50 px-3 py-1.5 bg-paper-200/70 rounded hover:bg-paper-200/80 hover:text-gold-400 transition-colors"
                   >
                     {r.name}
                     <span className="text-ink-500 ml-1">({r.type})</span>
@@ -170,7 +170,7 @@ export default function RoleGraph() {
       {tab === 'network' && (
         <div className="opera-card p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="section-header text-xs text-jade-200/50">
+            <h3 className="section-header text-xs text-ink-600/60">
               按朝代同现<span className="text-ink-500 ml-1">(双击查看脸谱)</span>
             </h3>
             <div className="flex gap-1">
@@ -180,7 +180,7 @@ export default function RoleGraph() {
                   className={`px-2 py-1 text-[10px] rounded transition-colors ${
                     dynasty === d
                       ? 'bg-gold-500/15 text-gold-400 border border-gold-500/30'
-                      : 'text-jade-200/40 border border-transparent hover:text-jade-200/60 hover:bg-ink-700/30'
+                      : 'text-ink-600/50 border border-transparent hover:text-ink-600/70 hover:bg-paper-200/70'
                   }`}
                 >
                   {d}

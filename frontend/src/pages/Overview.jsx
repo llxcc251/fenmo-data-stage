@@ -56,10 +56,10 @@ export default function Overview() {
   const wordCloudData = useMemo(() => {
     if (!roles.length) return []
     return roles
-      .filter(r => !r.generic && r.name.length <= 4)
+      .filter(r => !r.generic && r.name.length <= 6)
       .map(r => ({ name: r.name, value: r.plays?.length || 1 }))
       .sort((a, b) => b.value - a.value)
-      .slice(0, 60)
+      .slice(0, 180)
   }, [roles])
 
   const dynastyClick = useCallback((params) => {
@@ -137,7 +137,7 @@ export default function Overview() {
       height: '90%',
       right: null,
       bottom: null,
-      sizeRange: [10, 36],
+      sizeRange: [14, 42],
       rotationRange: [-30, 30],
       rotationStep: 30,
       gridSize: 6,
@@ -225,7 +225,7 @@ export default function Overview() {
             className={`text-[10px] px-2 py-0.5 rounded ${
               c.pct > 70 ? 'bg-jade-900/20 text-jade-400/70'
                 : c.pct > 30 ? 'bg-gold-500/10 text-gold-400/60'
-                : 'bg-ink-700/30 text-ink-500'
+                : 'bg-paper-200/70 text-ink-500'
             }`}>
             {c.label} {c.pct}%<span className="ml-1 opacity-60">({c.count}/{stats.totalPlays})</span>
           </span>
@@ -234,21 +234,21 @@ export default function Overview() {
 
       {/* charts */}
       <div className="opera-card p-4">
-        <h3 className="section-header text-xs text-jade-200/50 mb-3">角色词云<span className="text-ink-500 ml-1">（字号越大表示出演剧目越多）</span></h3>
-        <ReactEChartsCore option={wordCloudOption} style={{ height: 360 }} />
+        <h3 className="section-header text-xs text-ink-600/60 mb-3">角色词云<span className="text-ink-500 ml-1">（字号越大表示出演剧目越多）</span></h3>
+        <ReactEChartsCore option={wordCloudOption} style={{ height: 380 }} />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="opera-card p-4">
-          <h3 className="section-header text-xs text-jade-200/50 mb-3">行当子类 Top 10<span className="text-ink-500 ml-1">（角色数量排行）</span></h3>
+          <h3 className="section-header text-xs text-ink-600/60 mb-3">行当子类 Top 10<span className="text-ink-500 ml-1">（角色数量排行）</span></h3>
           <ReactEChartsCore option={roleTypeOption} style={{ height: 280 }} />
         </div>
         <div className="opera-card p-4">
-          <h3 className="section-header text-xs text-jade-200/50 mb-3">题材分布（点击查看剧目）</h3>
+          <h3 className="section-header text-xs text-ink-600/60 mb-3">题材分布（点击查看剧目）</h3>
           <ReactEChartsCore option={genreOption} style={{ height: 400 }} onEvents={{ click: genreClick }} />
         </div>
       </div>
       <div className="opera-card p-4">
-        <h3 className="section-header text-xs text-jade-200/50 mb-3">朝代分布（点击查看剧目）</h3>
+        <h3 className="section-header text-xs text-ink-600/60 mb-3">朝代分布（点击查看剧目）</h3>
         <ReactEChartsCore option={dynastyOption} style={{ height: 320 }} onEvents={{ click: dynastyClick }} />
       </div>
     </div>

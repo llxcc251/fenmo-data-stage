@@ -82,7 +82,7 @@ export default function MelodyFlow() {
             className="opera-card p-4 text-center group w-full"
           >
             <div className="font-title text-gold-500 mb-1 text-sm group-hover:text-gold-400 transition-colors">{m.name}</div>
-            <div className="font-number text-2xl text-jade-100">{(m.plays?.length || 0).toLocaleString()}</div>
+            <div className="font-number text-2xl text-ink-900">{(m.plays?.length || 0).toLocaleString()}</div>
             <div className="text-ink-500 text-[10px] mt-1">剧目</div>
           </button>
         ))}
@@ -90,7 +90,7 @@ export default function MelodyFlow() {
 
       {/* sankey */}
       <div className="opera-card p-4">
-        <h3 className="section-header text-xs text-jade-200/50 mb-3">声腔 → 板式 流向</h3>
+        <h3 className="section-header text-xs text-ink-600/60 mb-3">声腔 → 板式 流向</h3>
         <ReactEChartsCore option={sankeyOption} style={{ height: 300 }} />
       </div>
     </div>

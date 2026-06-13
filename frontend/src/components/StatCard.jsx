@@ -13,11 +13,11 @@ export default function StatCard({ label, value, sub, delay = 0, icon, onClick }
       className={`opera-card px-5 py-4 group text-left w-full ${cursorClass}`}
       {...props}
     >
-      <div className="flex items-center gap-2 text-jade-200/50 text-xs mb-2">
+      <div className="flex items-center gap-2 text-ink-600/60 text-xs mb-2">
         {icon && <span className="text-gold-500/50">{icon}</span>}
         <span>{label}</span>
       </div>
-      <div className="font-number text-3xl text-jade-100 group-hover:text-gold-400 transition-colors duration-500">
+      <div className="font-number text-3xl text-ink-900 group-hover:text-gold-400 transition-colors duration-500">
         {value.toLocaleString()}
       </div>
       {sub && <div className="text-ink-500 text-[10px] mt-1 tracking-wider">{sub}</div>}

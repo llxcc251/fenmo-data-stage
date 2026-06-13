@@ -16,8 +16,8 @@ function PageLoader() {
   return (
     <div className="space-y-6 p-6">
       <div className="animate-pulse">
-        <div className="h-6 w-32 bg-ink-600/20 rounded" />
-        <div className="h-3 w-48 bg-ink-600/20 rounded mt-2" />
+        <div className="h-6 w-32 bg-paper-200/80 rounded" />
+        <div className="h-3 w-48 bg-paper-200/80 rounded mt-2" />
       </div>
       <SkeletonCard count={6} />
     </div>
@@ -34,9 +34,9 @@ export default function App() {
             <Route path="/overview" element={<Overview />} />
             <Route path="/roles" element={<RoleGraph />} />
             <Route path="/melody" element={<MelodyFlow />} />
-            <Route path="/plays" element={<PlayUniverse />} />
             <Route path="/heritage" element={<HeritageMap />} />
             <Route path="/face-generator" element={<FaceGenerator />} />
+            <Route path="/plays" element={<PlayUniverse />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>

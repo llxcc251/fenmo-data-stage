@@ -23,7 +23,7 @@ export default function Layout({ children }) {
         </div>
 
         {/* Footer */}
-        <div className="relative z-10 text-center py-4 text-[10px] text-ink-500 border-t border-ink-700/30 mt-8">
+        <div className="relative z-10 text-center py-4 text-[10px] text-ink-600 border-t border-ink-600/20 mt-8">
           <span className="text-vermillion-700/40 mx-2">◆</span>
           粉墨数据台 · 中山大学 智能工程学院
           <span className="text-vermillion-700/40 mx-2">◆</span>

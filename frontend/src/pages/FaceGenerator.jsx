@@ -117,10 +117,10 @@ export default function FaceGenerator() {
         {/* role selector */}
         <div className="lg:col-span-1">
           <div className="opera-card p-4">
-            <h3 className="section-header text-xs text-jade-200/50 mb-3">选择角色</h3>
+            <h3 className="section-header text-xs text-ink-600/60 mb-3">选择角色</h3>
             <input type="text" placeholder="搜索角色..." value={searchRole}
               onChange={e => setSearchRole(e.target.value)}
-              className="w-full bg-ink-700/60 border border-ink-600/30 rounded px-3 py-2 text-sm text-jade-100 placeholder:text-ink-500
+              className="w-full bg-white/80 border border-ink-600/30 rounded px-3 py-2 text-sm text-ink-900 placeholder:text-ink-500
                          focus:outline-none focus:border-gold-500/50 mb-3 transition-colors"
             />
             <div className="max-h-80 overflow-y-auto space-y-0.5">
@@ -132,7 +132,7 @@ export default function FaceGenerator() {
                   key={r.name}
                   onClick={() => setRole(r.name)}
                   className={`w-full text-left text-xs px-3 py-1.5 rounded transition-all duration-200
-                    ${selectedRole === r.name ? 'bg-gold-500/10 text-gold-400' : 'text-jade-200/40 hover:text-jade-200/60 hover:bg-ink-700/30'}`}
+                    ${selectedRole === r.name ? 'bg-gold-500/10 text-gold-400' : 'text-ink-600/50 hover:text-ink-600/70 hover:bg-paper-200/70'}`}
                 >
                   <span className="inline-block w-3 h-3 rounded-sm mr-2 align-middle border border-ink-600/30"
                     style={{ backgroundColor: getRoleColor(r) }} />
@@ -177,12 +177,12 @@ export default function FaceGenerator() {
                   <div className="space-y-2">
                     <h3 className="font-title text-xl text-gold-400">{currentRole.name}</h3>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs px-2 py-0.5 bg-ink-700/60 rounded text-jade-200/60">{currentRole.type}</span>
-                      <span className="text-xs px-2 py-0.5 bg-ink-700/60 rounded text-jade-200/60">{currentRole.category}</span>
+                      <span className="text-xs px-2 py-0.5 bg-white/80 rounded text-ink-600/70">{currentRole.type}</span>
+                      <span className="text-xs px-2 py-0.5 bg-white/80 rounded text-ink-600/70">{currentRole.category}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded border border-ink-600/30" style={{ backgroundColor: fc }} />
-                      <span className="text-xs text-jade-200/60">脸谱色：{colorInfo}</span>
+                      <span className="text-xs text-ink-600/70">脸谱色：{colorInfo}</span>
                     </div>
                     <p className="text-[10px] text-ink-500">出现于 {rolePlays.length} 部剧目</p>
                     <div className="flex flex-wrap gap-1">
@@ -190,7 +190,7 @@ export default function FaceGenerator() {
                         <button
                           key={p.id}
                           onClick={() => navigate(`/plays?search=${encodeURIComponent(p.title)}`)}
-                          className="text-[10px] text-ink-500 bg-ink-700/30 px-2 rounded hover:text-gold-400 transition-colors"
+                          className="text-[10px] text-ink-500 bg-paper-200/70 px-2 rounded hover:text-gold-400 transition-colors"
                         >
                           {p.title}
                         </button>
@@ -208,10 +208,10 @@ export default function FaceGenerator() {
           )}
 
           <div className="opera-card p-4">
-            <h3 className="section-header text-xs text-jade-200/50 mb-3">脸谱颜色寓意</h3>
+            <h3 className="section-header text-xs text-ink-600/60 mb-3">脸谱颜色寓意</h3>
             <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
               {Object.entries(FACE_COLORS).map(([color, info]) => (
-                <div key={color} className="flex items-center gap-2 text-xs text-jade-200/40">
+                <div key={color} className="flex items-center gap-2 text-xs text-ink-600/50">
                   <div className="w-4 h-4 rounded border border-ink-600/30" style={{ backgroundColor: info.fill }} />
                   <span>{color} — {info.label}</span>
                 </div>

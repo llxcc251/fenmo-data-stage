@@ -198,7 +198,7 @@ export default function HeritageMap() {
           <p className="text-ink-500 text-[10px]">
             筛选朝代：<span className="text-gold-400">{brushedDynasties.join(' · ')}</span>
           </p>
-          <button onClick={resetBrush} className="text-[10px] text-jade-200/40 hover:text-jade-200/60 transition-colors">
+          <button onClick={resetBrush} className="text-[10px] text-ink-600/50 hover:text-ink-600/70 transition-colors">
             重置筛选
           </button>
         </div>
@@ -206,7 +206,7 @@ export default function HeritageMap() {
 
       {/* Row 1: Timeline full width */}
       <div className="opera-card p-4">
-        <h3 className="section-header text-xs text-jade-200/50 mb-3">
+        <h3 className="section-header text-xs text-ink-600/60 mb-3">
           剧目时代趋势<span className="text-ink-500 ml-1">（点击朝代查看剧目 · 拖拽滑块刷选）</span>
         </h3>
         <ReactEChartsCore
@@ -219,7 +219,7 @@ export default function HeritageMap() {
 
       {/* Row 2: Heatmap full width */}
       <div className="opera-card p-4">
-        <h3 className="section-header text-xs text-jade-200/50 mb-3">题材 x 朝代 热度</h3>
+        <h3 className="section-header text-xs text-ink-600/60 mb-3">题材 x 朝代 热度</h3>
         <ReactEChartsCore option={heatmapOption} style={{ height: 340 }} />
       </div>
     </div>

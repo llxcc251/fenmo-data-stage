@@ -12,7 +12,7 @@ const navItems = [
 
 export default function Navigation() {
   return (
-    <nav className="w-56 shrink-0 border-r border-vermillion-900/30 bg-ink-800/60 flex flex-col relative">
+    <nav className="w-56 shrink-0 border-r border-vermillion-900/10 bg-paper-200/60 flex flex-col relative">
       {/* Decorative top red line */}
       <div className="h-1 bg-gradient-to-r from-vermillion-900/60 via-gold-700/40 to-vermillion-900/60" />
 
@@ -36,7 +36,7 @@ export default function Navigation() {
               `relative flex items-center gap-3 px-6 py-3 text-sm transition-all duration-300 group
               ${isActive
                 ? 'text-gold-400 bg-gradient-to-r from-gold-500/15 to-transparent'
-                : 'text-jade-200/40 hover:text-jade-200/70 hover:bg-white/[0.02]'
+                : 'text-ink-600/50 hover:text-ink-800 hover:bg-ink-700/5'
               }`
             }
           >
@@ -55,8 +55,20 @@ export default function Navigation() {
         ))}
       </div>
 
+      {/* Face mask decorative watermark */}
+      <div className="px-6 py-3 border-t border-ink-700/20">
+        <svg viewBox="0 0 80 50" className="w-full h-10 opacity-[0.04]">
+          {/* Simplified 脸谱 silhouette */}
+          <ellipse cx="40" cy="25" rx="20" ry="22" fill="currentColor" />
+          <ellipse cx="30" cy="18" rx="5" ry="3" fill="#F0EBE0" />
+          <ellipse cx="50" cy="18" rx="5" ry="3" fill="#F0EBE0" />
+          <circle cx="40" cy="26" r="2" fill="#F0EBE0" />
+          <path d="M30 34 Q40 40 50 34" stroke="currentColor" strokeWidth="1.5" fill="none" />
+          <rect x="28" y="8" width="24" height="2" rx="1" fill="currentColor" opacity="0.5" />
+        </svg>
+      </div>
       {/* Decorative bottom */}
-      <div className="px-6 py-4 border-t border-ink-700/50">
+      <div className="px-6 py-4">
         <div className="flex items-center gap-2 text-[10px] text-ink-500">
           <span className="text-vermillion-700/40">◈</span>
           中山大学 · 智慧交通
