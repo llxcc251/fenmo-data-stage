@@ -43,7 +43,7 @@ export default function Navigation() {
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-10 bg-gradient-to-b from-gold-500 via-vermillion-600 to-gold-500 rounded-r shadow-lg shadow-gold-500/30" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-gold-500/80 via-vermillion-600/70 to-gold-500/80 rounded-r" />
                 )}
                 <span className={`transition-transform duration-300 ${isActive ? 'translate-x-1' : 'group-hover:translate-x-1'}`}>
                   {item.label}
@@ -55,24 +55,20 @@ export default function Navigation() {
         ))}
       </div>
 
-      {/* Face mask decorative watermark */}
-      <div className="px-6 py-3 border-t border-ink-700/20">
-        <svg viewBox="0 0 80 50" className="w-full h-10 opacity-[0.04]">
-          {/* Simplified 脸谱 silhouette */}
-          <ellipse cx="40" cy="25" rx="20" ry="22" fill="currentColor" />
-          <ellipse cx="30" cy="18" rx="5" ry="3" fill="#F0EBE0" />
-          <ellipse cx="50" cy="18" rx="5" ry="3" fill="#F0EBE0" />
-          <circle cx="40" cy="26" r="2" fill="#F0EBE0" />
-          <path d="M30 34 Q40 40 50 34" stroke="currentColor" strokeWidth="1.5" fill="none" />
-          <rect x="28" y="8" width="24" height="2" rx="1" fill="currentColor" opacity="0.5" />
-        </svg>
-      </div>
       {/* Decorative bottom */}
+      <div className="border-t border-ink-700/10 mx-6" />
       <div className="px-6 py-4">
         <div className="flex items-center gap-2 text-[10px] text-ink-500">
-          <span className="text-vermillion-700/40">◈</span>
+          <span className="text-vermillion-700/30">◈</span>
           中山大学 · 智慧交通
-          <span className="text-vermillion-700/40">◈</span>
+          <span className="text-vermillion-700/30">◈</span>
+        </div>
+        <div className="flex items-center justify-center gap-1 mt-2">
+          {[...Array(4)].map((_, i) => (
+            <span key={i} className="w-1 h-1 rounded-full" style={{
+              backgroundColor: i % 2 === 0 ? 'rgba(220,38,38,0.12)' : 'rgba(245,158,11,0.12)'
+            }} />
+          ))}
         </div>
       </div>
     </nav>
