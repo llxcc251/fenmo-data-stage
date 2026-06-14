@@ -18,11 +18,11 @@ export default function Navigation() {
 
       {/* logo */}
       <div className="px-6 pt-8 pb-6 border-b border-ink-700/50">
-        <h1 className="font-title text-xl text-gold-500 tracking-wider flex items-center gap-2">
-          <span className="text-vermillion-600 text-xs">◆</span>
+        <h1 className="font-title text-2xl text-gold-500 tracking-wider flex items-center gap-2">
+          <span className="text-vermillion-600 text-sm">◆</span>
           粉墨数据台
         </h1>
-        <p className="text-ink-500 text-xs mt-1 tracking-wider">京剧数据集 · 沉浸式可视化</p>
+        <p className="text-ink-500 text-sm mt-1 tracking-wider">京剧数据集 · 沉浸式可视化</p>
       </div>
 
       {/* nav items */}
@@ -33,7 +33,7 @@ export default function Navigation() {
             to={item.path}
             end={item.path === '/'}
             className={({ isActive }) =>
-              `relative flex items-center gap-3 px-6 py-3 text-sm transition-all duration-300 group
+              `relative flex items-center gap-3 px-6 py-4 text-base transition-all duration-300 group
               ${isActive
                 ? 'text-gold-400 bg-gradient-to-r from-gold-500/15 to-transparent'
                 : 'text-ink-600/50 hover:text-ink-800 hover:bg-ink-700/5'
@@ -43,12 +43,12 @@ export default function Navigation() {
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-gold-500/80 via-vermillion-600/70 to-gold-500/80 rounded-r" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-10 bg-gradient-to-b from-gold-500/80 via-vermillion-600/70 to-gold-500/80 rounded-r" />
                 )}
-                <span className={`transition-transform duration-300 ${isActive ? 'translate-x-1' : 'group-hover:translate-x-1'}`}>
+                <span className={`font-title transition-transform duration-300 ${isActive ? 'translate-x-1' : 'group-hover:translate-x-1'}`}>
                   {item.label}
                 </span>
-                <span className="text-[10px] text-ink-500">{item.sub}</span>
+                <span className="text-xs text-ink-500">{item.sub}</span>
               </>
             )}
           </NavLink>
@@ -58,7 +58,7 @@ export default function Navigation() {
       {/* Decorative bottom */}
       <div className="border-t border-ink-700/10 mx-6" />
       <div className="px-6 py-4">
-        <div className="flex items-center gap-2 text-[10px] text-ink-500">
+        <div className="flex items-center gap-2 text-xs text-ink-500">
           <span className="text-vermillion-700/30">◈</span>
           中山大学 · 智慧交通
           <span className="text-vermillion-700/30">◈</span>

@@ -1,9 +1,6 @@
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import * as d3 from 'd3'
-
-const CATEGORY_COLORS = {
-  '生': '#6366F1', '旦': '#EF4444', '净': '#F59E0B', '丑': '#6B7280', '其他': '#3A3A3A'
-}
+import { CATEGORY_COLORS } from '../constants'
 
 const CATEGORY_GLOWS = {
   '生': 'rgba(99,102,241,0.3)', '旦': 'rgba(239,68,68,0.3)', '净': 'rgba(245,158,11,0.3)', '丑': 'rgba(107,114,128,0.3)', '其他': 'rgba(58,58,58,0.3)'

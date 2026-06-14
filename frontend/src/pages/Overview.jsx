@@ -53,6 +53,7 @@ export default function Overview() {
   }, [plays, roles, melodies, relations])
 
   // Word cloud data: role names sized by play frequency
+  const WORD_CLOUD_COLORS = ['#F59E0B', '#DC2626', '#6366F1', '#14B8A6', '#EC4899', '#D4D4C8', '#6B7280']
   const wordCloudData = useMemo(() => {
     if (!roles.length) return []
     return roles
@@ -60,7 +61,13 @@ export default function Overview() {
       .map(r => ({ name: r.name, value: r.plays?.length || 1 }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 180)
+      .map((item, i) => ({ ...item, textStyle: { color: WORD_CLOUD_COLORS[i % WORD_CLOUD_COLORS.length] } }))
   }, [roles])
+
+  const wordCloudClick = useCallback((params) => {
+    const role = params.name
+    if (role) navigate(`/face-generator?role=${encodeURIComponent(role)}`)
+  }, [navigate])
 
   const dynastyClick = useCallback((params) => {
     const dynasty = params.name
@@ -100,6 +107,8 @@ export default function Overview() {
   }
 
   const dynastyOption = {
+    animationDuration: 1200,
+    animationEasing: 'cubicOut',
     tooltip: { trigger: 'axis', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     grid: { left: 50, right: 16, top: 8, bottom: 28 },
     xAxis: {
@@ -126,6 +135,8 @@ export default function Overview() {
   }
 
   const wordCloudOption = {
+    animationDuration: 1200,
+    animationEasing: 'cubicOut',
     tooltip: { show: true, backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     series: [{
       type: 'wordCloud',
@@ -145,10 +156,6 @@ export default function Overview() {
       layoutAnimation: true,
       textStyle: {
         fontFamily: 'Noto Serif SC, serif',
-        color: () => {
-          const colors = ['#F59E0B', '#DC2626', '#6366F1', '#14B8A6', '#EC4899', '#D4D4C8', '#6B7280']
-          return colors[Math.floor(Math.random() * colors.length)]
-        },
       },
       data: wordCloudData,
       emphasis: {
@@ -158,8 +165,10 @@ export default function Overview() {
   }
 
   const roleTypeOption = {
+    animationDuration: 1200,
+    animationEasing: 'cubicOut',
     tooltip: { trigger: 'axis', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
-    grid: { left: 16, right: 40, top: 8, bottom: 28 },
+    grid: { left: 56, right: 40, top: 8, bottom: 28 },
     xAxis: {
       type: 'value',
       splitLine: { lineStyle: { color: '#E5DFD0' } },
@@ -183,6 +192,8 @@ export default function Overview() {
   }
 
   const genreOption = {
+    animationDuration: 1200,
+    animationEasing: 'cubicOut',
     tooltip: { trigger: 'item', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     series: [{
       type: 'pie',
@@ -223,8 +234,8 @@ export default function Overview() {
         {stats.coverage.map(c => (
           <span key={c.label}
             className={`text-[10px] px-2 py-0.5 rounded ${
-              c.pct > 70 ? 'bg-jade-900/20 text-jade-400/70'
-                : c.pct > 30 ? 'bg-gold-500/10 text-gold-400/60'
+              c.pct > 70 ? 'bg-ink-900/10 text-ink-700'
+                : c.pct > 30 ? 'bg-gold-500/10 text-gold-600/80'
                 : 'bg-paper-200/70 text-ink-500'
             }`}>
             {c.label} {c.pct}%<span className="ml-1 opacity-60">({c.count}/{stats.totalPlays})</span>
@@ -235,21 +246,29 @@ export default function Overview() {
       {/* charts */}
       <div className="opera-card p-4">
         <h3 className="section-header text-xs text-ink-600/60 mb-3">角色词云<span className="text-ink-500 ml-1">（字号越大表示出演剧目越多）</span></h3>
-        <ReactEChartsCore option={wordCloudOption} style={{ height: 380 }} />
+        <div className="w-full" style={{ aspectRatio: '21/9', minHeight: 260 }}>
+          <ReactEChartsCore option={wordCloudOption} style={{ width: '100%', height: '100%' }} onEvents={{ click: wordCloudClick }} />
+        </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="opera-card p-4">
           <h3 className="section-header text-xs text-ink-600/60 mb-3">行当子类 Top 10<span className="text-ink-500 ml-1">（角色数量排行）</span></h3>
-          <ReactEChartsCore option={roleTypeOption} style={{ height: 280 }} />
+          <div className="w-full" style={{ aspectRatio: '16/9', minHeight: 220 }}>
+            <ReactEChartsCore option={roleTypeOption} style={{ width: '100%', height: '100%' }} />
+          </div>
         </div>
         <div className="opera-card p-4">
           <h3 className="section-header text-xs text-ink-600/60 mb-3">题材分布（点击查看剧目）</h3>
-          <ReactEChartsCore option={genreOption} style={{ height: 400 }} onEvents={{ click: genreClick }} />
+          <div className="w-full" style={{ aspectRatio: '4/3', minHeight: 260 }}>
+            <ReactEChartsCore option={genreOption} style={{ width: '100%', height: '100%' }} onEvents={{ click: genreClick }} />
+          </div>
         </div>
       </div>
       <div className="opera-card p-4">
         <h3 className="section-header text-xs text-ink-600/60 mb-3">朝代分布（点击查看剧目）</h3>
-        <ReactEChartsCore option={dynastyOption} style={{ height: 320 }} onEvents={{ click: dynastyClick }} />
+        <div className="w-full" style={{ aspectRatio: '16/9', minHeight: 240 }}>
+          <ReactEChartsCore option={dynastyOption} style={{ width: '100%', height: '100%' }} onEvents={{ click: dynastyClick }} />
+        </div>
       </div>
     </div>
   )

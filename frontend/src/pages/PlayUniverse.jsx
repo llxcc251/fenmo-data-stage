@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useStore from '../store/useStore'
-
-const DYNASTY_ORDER = ['商','周','春秋','战国','秦','汉','三国','晋','南北朝','隋','唐','五代','宋','北宋','南宋','元','明','清','历史朝代不详']
+import { DYNASTY_ORDER } from '../constants'
 
 const DIMS = [
   { key: 'dynasty', label: '朝代' },

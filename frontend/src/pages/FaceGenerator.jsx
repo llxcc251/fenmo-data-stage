@@ -18,9 +18,9 @@ const FACE_COLORS = {
 }
 
 const FALLBACK_COLORS = {
-  '老生': '#92400E', '小生': '#EC4899', '武生': '#14B8A6', '红生': '#DC2626',
-  '正生': '#1E40AF', '武老生': '#6B7280', '娃娃生': '#F9A8D4', '外': '#92400E',
-  '末': '#6B7280', '童': '#F9A8D4', '生': '#6366F1',
+  '老生': '#92400E', '小生': '#60A5FA', '武生': '#14B8A6', '红生': '#DC2626',
+  '正生': '#1E40AF', '武老生': '#6B7280', '娃娃生': '#A78BFA', '外': '#92400E',
+  '末': '#6B7280', '童': '#A78BFA', '生': '#6366F1',
   '正旦': '#DB2777', '花旦': '#EC4899', '老旦': '#92400E', '武旦': '#2563EB',
   '小旦': '#F9A8D4', '彩旦': '#D97706', '贴旦': '#BE185D', '丑旦': '#65A30D',
   '旦': '#EC4899',
@@ -42,7 +42,11 @@ function getRoleColor(role) {
 function getColorLabel(role) {
   if (!role) return '未知'
   if (role.faceColor && FACE_COLORS[role.faceColor]) return `${role.faceColor} — ${FACE_COLORS[role.faceColor].label}`
-  return role.type
+  // Fallback color matches a FACE_COLORS entry → show its meaning
+  const color = getRoleColor(role)
+  const match = Object.entries(FACE_COLORS).find(([, v]) => v.fill === color)
+  if (match) return `${match[0]} — ${match[1].label}（行当映射）`
+  return null
 }
 
 export default function FaceGenerator() {
@@ -56,7 +60,7 @@ export default function FaceGenerator() {
 
   const coloredRoles = useMemo(() => {
     return roles.filter(r => r.type && !r.generic).sort((a, b) => {
-      const order = ['净', '丑', '生', '旦']
+      const order = ['生', '旦', '净', '丑']
       return (order.indexOf(a.category) - order.indexOf(b.category)) || (a.name.localeCompare(b.name))
     })
   }, [roles])
@@ -113,17 +117,17 @@ export default function FaceGenerator() {
         <p className="text-ink-500 text-xs mt-1 ml-4">角色数据映射为脸谱视觉符号</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* role selector */}
-        <div className="lg:col-span-1">
-          <div className="opera-card p-4">
+        <div className="lg:col-span-2">
+          <div className="opera-card p-5">
             <h3 className="section-header text-xs text-ink-600/60 mb-3">选择角色</h3>
             <input type="text" placeholder="搜索角色..." value={searchRole}
               onChange={e => setSearchRole(e.target.value)}
               className="w-full bg-white/80 border border-ink-600/30 rounded px-3 py-2 text-sm text-ink-900 placeholder:text-ink-500
                          focus:outline-none focus:border-gold-500/50 mb-3 transition-colors"
             />
-            <div className="max-h-80 overflow-y-auto space-y-0.5">
+            <div className="max-h-[520px] overflow-y-auto space-y-0.5">
               {filteredRoles.length > 100 && (
                 <p className="text-ink-600 text-[10px] px-3 pb-1">前 100 个角色，输入名称搜索更多</p>
               )}
@@ -145,13 +149,13 @@ export default function FaceGenerator() {
         </div>
 
         {/* face display */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3">
           {currentRole ? (
             <>
-              <div className="opera-card p-6 mb-4">
-                <div className="flex items-center gap-6">
-                  {/* face SVG */}
-                  <div className="w-40 h-48 shrink-0">
+              <div className="opera-card p-8 mb-4">
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                  {/* face SVG — bigger */}
+                  <div className="w-56 h-64 shrink-0">
                     <svg viewBox="0 0 100 120" className="w-full h-full drop-shadow-lg">
                       <ellipse cx="50" cy="55" rx="38" ry="42" fill={fc || '#666'} />
                       <ellipse cx="35" cy="45" rx="8" ry="5" fill="#0A0A0A" />
@@ -174,45 +178,49 @@ export default function FaceGenerator() {
                     </svg>
                   </div>
                   {/* info */}
-                  <div className="space-y-2">
-                    <h3 className="font-title text-xl text-gold-400">{currentRole.name}</h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs px-2 py-0.5 bg-white/80 rounded text-ink-600/70">{currentRole.type}</span>
-                      <span className="text-xs px-2 py-0.5 bg-white/80 rounded text-ink-600/70">{currentRole.category}</span>
+                  <div className="space-y-3">
+                    <h3 className="font-title text-2xl text-gold-400">{currentRole.name}</h3>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm px-3 py-1 bg-white/80 rounded text-ink-600/70">{currentRole.type}</span>
+                      <span className="text-sm px-3 py-1 bg-white/80 rounded text-ink-600/70">{currentRole.category}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded border border-ink-600/30" style={{ backgroundColor: fc }} />
-                      <span className="text-xs text-ink-600/70">脸谱色：{colorInfo}</span>
+                      <div className="w-6 h-6 rounded border border-ink-600/30" style={{ backgroundColor: fc }} />
+                      {colorInfo ? (
+                        <span className="text-sm text-ink-600/70">脸谱色：{colorInfo}</span>
+                      ) : (
+                        <span className="text-sm text-ink-600/70">{currentRole.type} · {currentRole.category}行</span>
+                      )}
                     </div>
-                    <p className="text-[10px] text-ink-500">出现于 {rolePlays.length} 部剧目</p>
-                    <div className="flex flex-wrap gap-1">
-                      {rolePlays.slice(0, 5).map(p => (
+                    <p className="text-xs text-ink-500">出现于 {rolePlays.length} 部剧目</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {rolePlays.slice(0, 6).map(p => (
                         <button
                           key={p.id}
                           onClick={() => navigate(`/plays?search=${encodeURIComponent(p.title)}`)}
-                          className="text-[10px] text-ink-500 bg-paper-200/70 px-2 rounded hover:text-gold-400 transition-colors"
+                          className="text-xs text-ink-500 bg-paper-200/70 px-2.5 py-1 rounded hover:text-gold-400 transition-colors"
                         >
                           {p.title}
                         </button>
                       ))}
-                      {rolePlays.length > 5 && <span className="text-[10px] text-ink-500">等 {rolePlays.length} 部</span>}
+                      {rolePlays.length > 6 && <span className="text-xs text-ink-500">等 {rolePlays.length} 部</span>}
                     </div>
                   </div>
                 </div>
               </div>
             </>
           ) : (
-            <div className="opera-card flex items-center justify-center p-6" style={{ minHeight: 300 }}>
-              <p className="text-ink-500 text-sm">请选择一个角色查看脸谱</p>
+            <div className="opera-card flex items-center justify-center p-10" style={{ minHeight: 400 }}>
+              <p className="text-ink-500 text-base">请选择一个角色查看脸谱</p>
             </div>
           )}
 
-          <div className="opera-card p-4">
+          <div className="opera-card p-5">
             <h3 className="section-header text-xs text-ink-600/60 mb-3">脸谱颜色寓意</h3>
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
               {Object.entries(FACE_COLORS).map(([color, info]) => (
-                <div key={color} className="flex items-center gap-2 text-xs text-ink-600/50">
-                  <div className="w-4 h-4 rounded border border-ink-600/30" style={{ backgroundColor: info.fill }} />
+                <div key={color} className="flex items-center gap-2 text-sm text-ink-600/50">
+                  <div className="w-5 h-5 rounded border border-ink-600/30 shrink-0" style={{ backgroundColor: info.fill }} />
                   <span>{color} — {info.label}</span>
                 </div>
               ))}

@@ -10,7 +10,7 @@ export default function StatCard({ label, value, sub, delay = 0, icon, onClick }
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className={`opera-card px-5 py-4 group text-left w-full ${cursorClass}`}
+      className={`opera-card px-5 py-4 group text-left w-full ${cursorClass} hover:-translate-y-1`}
       {...props}
     >
       <div className="flex items-center gap-2 text-ink-600/60 text-xs mb-2">

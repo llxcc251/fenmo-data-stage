@@ -2,9 +2,7 @@ import { useEffect, useMemo, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useStore from '../store/useStore'
 import ReactEChartsCore from 'echarts-for-react'
-
-const DYNASTY_ORDER = ['商', '周', '春秋', '战国', '秦', '汉', '三国', '晋', '南北朝',
-                       '隋', '唐', '五代', '宋', '元', '明', '清', '历史朝代不详']
+import { DYNASTY_ORDER } from '../constants'
 
 export default function HeritageMap() {
   const { plays, loaded, error, loadData } = useStore()
@@ -80,6 +78,8 @@ export default function HeritageMap() {
 
   // Memoized timeline option — depends on zoomRange so slider stays in sync
   const timelineOption = useMemo(() => fullData ? ({
+    animationDuration: 1200,
+    animationEasing: 'cubicOut',
     tooltip: { trigger: 'axis', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     grid: { left: 40, right: 16, top: 8, bottom: 48 },
     xAxis: {
@@ -120,7 +120,7 @@ export default function HeritageMap() {
     })
     // Top dynasties (filtered by brush if active)
     let topDyns = Object.keys(dg).sort((a, b) => {
-      const order = ['历史朝代不详','商','周','春秋','战国','秦','汉','三国','晋','南北朝','隋','唐','五代','宋','元','明','清']
+      const order = DYNASTY_ORDER
       return (order.indexOf(a) !== -1 ? order.indexOf(a) : 99) - (order.indexOf(b) !== -1 ? order.indexOf(b) : 99)
     }).filter(d => d !== '神话')
     if (brushedDynasties) topDyns = topDyns.filter(d => brushedDynasties.includes(d))
@@ -145,6 +145,8 @@ export default function HeritageMap() {
     if (!genreHeatmapData) return null
     const maxV = Math.max(...genreHeatmapData.data.map(d => d[2]))
     return {
+      animationDuration: 1200,
+      animationEasing: 'cubicOut',
       tooltip: {
         position: 'top',
         backgroundColor: '#FFFFFD', borderColor: '#D5CEBC',
@@ -154,7 +156,7 @@ export default function HeritageMap() {
       grid: { left: 80, right: 40, top: 8, bottom: 40 },
       xAxis: { type: 'category', data: genreHeatmapData.dyns, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitArea: { show: true } },
       yAxis: { type: 'category', data: genreHeatmapData.genres, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitArea: { show: true } },
-      visualMap: { min: 0, max: maxV, calculable: true, orient: 'horizontal', left: 'center', bottom: 0, inRange: { color: ['#1A1A1A', '#DC2626', '#F59E0B'] }, textStyle: { color: '#6B6B68', fontSize: 9 } },
+      visualMap: { min: 0, max: maxV, calculable: true, orient: 'horizontal', left: 'center', bottom: 0, inRange: { color: ['#FAF7F0', '#F59E0B', '#DC2626'] }, textStyle: { color: '#6B6B68', fontSize: 9 } },
       series: [{ type: 'heatmap', data: genreHeatmapData.data, label: { show: true, color: '#4A4A48', fontSize: 8 }, emphasis: { itemStyle: { shadowBlur: 10 } } }],
     }
   }, [genreHeatmapData])
@@ -209,18 +211,22 @@ export default function HeritageMap() {
         <h3 className="section-header text-xs text-ink-600/60 mb-3">
           剧目时代趋势<span className="text-ink-500 ml-1">（点击朝代查看剧目 · 拖拽滑块刷选）</span>
         </h3>
-        <ReactEChartsCore
-          ref={timelineRef}
-          option={timelineOption}
-          style={{ height: 300 }}
-          onEvents={{ ...onEvents, click: timelineClick }}
-        />
+        <div className="w-full" style={{ aspectRatio: '21/9', minHeight: 240 }}>
+          <ReactEChartsCore
+            ref={timelineRef}
+            option={timelineOption}
+            style={{ width: '100%', height: '100%' }}
+            onEvents={{ ...onEvents, click: timelineClick }}
+          />
+        </div>
       </div>
 
       {/* Row 2: Heatmap full width */}
       <div className="opera-card p-4">
         <h3 className="section-header text-xs text-ink-600/60 mb-3">题材 x 朝代 热度</h3>
-        <ReactEChartsCore option={heatmapOption} style={{ height: 340 }} />
+        <div className="w-full" style={{ aspectRatio: '16/9', minHeight: 260 }}>
+          <ReactEChartsCore option={heatmapOption} style={{ width: '100%', height: '100%' }} />
+        </div>
       </div>
     </div>
   )

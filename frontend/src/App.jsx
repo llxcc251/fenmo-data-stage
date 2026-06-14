@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import Layout from './components/Layout'
 import ErrorBoundary from './components/ErrorBoundary'
 import SkeletonCard from './components/SkeletonCard'
@@ -24,21 +25,38 @@ function PageLoader() {
   )
 }
 
+function PageTransition({ children }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
 export default function App() {
+  const location = useLocation()
+
   return (
     <Layout>
       <ErrorBoundary>
         <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/overview" element={<Overview />} />
-            <Route path="/roles" element={<RoleGraph />} />
-            <Route path="/melody" element={<MelodyFlow />} />
-            <Route path="/heritage" element={<HeritageMap />} />
-            <Route path="/face-generator" element={<FaceGenerator />} />
-            <Route path="/plays" element={<PlayUniverse />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/overview" element={<PageTransition><Overview /></PageTransition>} />
+              <Route path="/roles" element={<PageTransition><RoleGraph /></PageTransition>} />
+              <Route path="/melody" element={<PageTransition><MelodyFlow /></PageTransition>} />
+              <Route path="/heritage" element={<PageTransition><HeritageMap /></PageTransition>} />
+              <Route path="/face-generator" element={<PageTransition><FaceGenerator /></PageTransition>} />
+              <Route path="/plays" element={<PageTransition><PlayUniverse /></PageTransition>} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </AnimatePresence>
         </Suspense>
       </ErrorBoundary>
     </Layout>

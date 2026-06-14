@@ -44,9 +44,9 @@ export default {
         },
       },
       fontFamily: {
-        title: ['"Noto Serif TC"', 'serif'],
-        body: ['"Noto Sans TC"', 'sans-serif'],
-        number: ['Orbitron', 'monospace'],
+        title: ['"Noto Serif TC"', '"Noto Serif CJK SC"', '"Source Han Serif SC"', 'serif'],
+        body: ['"Noto Sans TC"', '"Noto Sans CJK SC"', '"PingFang SC"', '"Microsoft YaHei"', 'sans-serif'],
+        number: ['Orbitron', '"JetBrains Mono"', 'monospace'],
       },
       animation: {
         'curtain-open': 'curtainOpen 1.2s ease-out forwards',

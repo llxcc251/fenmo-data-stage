@@ -31,9 +31,10 @@ const useStore = create((set) => ({
         relations: relations.data || relations,
         loaded: true,
         loading: false,
+        error: null,
       })
     } catch (err) {
-      set({ error: err.message, loading: false })
+      set({ error: err.message, loading: false, loaded: false })
     }
   },
 }))

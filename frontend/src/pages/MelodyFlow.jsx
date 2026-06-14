@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useStore from '../store/useStore'
 import ReactEChartsCore from 'echarts-for-react'
@@ -31,6 +31,13 @@ export default function MelodyFlow() {
     return { melodyPlayCount, patternCount, sankeyNodes, sankeyLinks }
   }, [plays, melodies])
 
+  const sankeyClick = useCallback((params) => {
+    if (!params.name) return
+    if (melodies.some(m => m.name === params.name)) {
+      navigate(`/plays?melody=${encodeURIComponent(params.name)}`)
+    }
+  }, [navigate, melodies])
+
   if (!data) return (
     <div className="flex flex-col items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
       {error ? (
@@ -47,6 +54,8 @@ export default function MelodyFlow() {
   )
 
   const sankeyOption = {
+    animationDuration: 1200,
+    animationEasing: 'cubicOut',
     tooltip: { trigger: 'item', formatter: (p) => `${p.data.source || p.name} → ${p.data.target || ''} ${p.value} 部剧目`, backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     series: [{
       type: 'sankey', layout: 'none',
@@ -91,7 +100,9 @@ export default function MelodyFlow() {
       {/* sankey */}
       <div className="opera-card p-4">
         <h3 className="section-header text-xs text-ink-600/60 mb-3">声腔 → 板式 流向</h3>
-        <ReactEChartsCore option={sankeyOption} style={{ height: 300 }} />
+        <div className="w-full" style={{ aspectRatio: '16/9', minHeight: 260 }}>
+          <ReactEChartsCore option={sankeyOption} style={{ width: '100%', height: '100%' }} onEvents={{ click: sankeyClick }} />
+        </div>
       </div>
     </div>
   )
