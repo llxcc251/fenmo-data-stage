@@ -1,35 +1,97 @@
-import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
-const FLOATING_CHARS = ['京', '剧', '生', '旦', '净', '丑', '西皮', '二黄', '粉墨', '锣鼓']
+// Three depth layers for aesthetic depth
+function buildFaces() {
+  const all = []
+  let id = 0
+
+  // Layer 1: background — large, blurry, sepia-toned, slow, drifts
+  const bgCount = 25
+  for (let i = 0; i < bgCount; i++) {
+    const idx = (id * 7 + 3) % 90
+    all.push({
+      src: `/faces/face_${String(idx).padStart(3, '0')}.png`,
+      x: 4 + Math.random() * 92,
+      delay: Math.random() * 3,
+      duration: 20 + Math.random() * 10,
+      size: 90 + Math.random() * 50,
+      opacity: 0.04 + Math.random() * 0.05,
+      sway: 8 + Math.random() * 12,
+      rotation: (Math.random() - 0.5) * 30,
+      filter: 'blur(3px) sepia(0.6) saturate(0.6) brightness(0.8)',
+      layer: 'bg',
+    })
+    id++
+  }
+
+  // Layer 2: midground — medium, gentle sway, warmer tone
+  const mgCount = 35
+  for (let i = 0; i < mgCount; i++) {
+    const idx = (id * 7 + 3) % 90
+    all.push({
+      src: `/faces/face_${String(idx).padStart(3, '0')}.png`,
+      x: 3 + Math.random() * 94,
+      delay: Math.random() * 2.5,
+      duration: 12 + Math.random() * 7,
+      size: 55 + Math.random() * 35,
+      opacity: 0.07 + Math.random() * 0.08,
+      sway: 15 + Math.random() * 15,
+      rotation: (Math.random() - 0.5) * 20,
+      filter: 'sepia(0.3) saturate(0.8) brightness(0.9)',
+      layer: 'mg',
+    })
+    id++
+  }
+
+  // Layer 3: foreground — smaller, clearer, moves faster, more visible
+  const fgCount = 30
+  for (let i = 0; i < fgCount; i++) {
+    const idx = (id * 7 + 3) % 90
+    all.push({
+      src: `/faces/face_${String(idx).padStart(3, '0')}.png`,
+      x: 2 + Math.random() * 96,
+      delay: Math.random() * 1.5,
+      duration: 7 + Math.random() * 5,
+      size: 35 + Math.random() * 25,
+      opacity: 0.12 + Math.random() * 0.10,
+      sway: 20 + Math.random() * 20,
+      rotation: (Math.random() - 0.5) * 15,
+      filter: 'none',
+      layer: 'fg',
+    })
+    id++
+  }
+
+  return all
+}
+
+const faceFloaters = buildFaces()
 
 export default function Home() {
-  const particles = useMemo(() => {
-    return FLOATING_CHARS.map((ch, i) => ({
-      char: ch,
-      x: Math.random() * 80 + 10,
-      delay: Math.random() * 8,
-      duration: 10 + Math.random() * 8,
-      size: 14 + Math.random() * 18,
-      opacity: 0.04 + Math.random() * 0.06,
-    }))
-  }, [])
-
   return (
     <div className="flex flex-col items-center justify-center text-center overflow-hidden relative" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-      {/* Floating particles */}
-      {particles.map((p, i) => (
-        <motion.span
+      {/* Floating faces — atmospheric layers with gentle drift */}
+      {faceFloaters.map((f, i) => (
+        <motion.img
           key={i}
-          className="absolute pointer-events-none select-none font-title"
-          style={{ left: `${p.x}%`, fontSize: p.size, color: '#4A4A48' }}
-          initial={{ opacity: 0, y: '100vh' }}
-          animate={{ opacity: [0, p.opacity, p.opacity, 0], y: ['100vh', '-10vh'] }}
-          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: 'linear' }}
-        >
-          {p.char}
-        </motion.span>
+          src={f.src}
+          alt=""
+          className="absolute pointer-events-none select-none"
+          style={{
+            left: `${f.x}%`, width: f.size, height: f.size,
+            objectFit: 'contain', filter: f.filter, rotate: f.rotation,
+          }}
+          initial={{ opacity: f.opacity }}
+          animate={{
+            y: ['110vh', '-15vh'],
+            x: [0, f.sway, -f.sway * 0.6, f.sway * 0.3, 0],
+          }}
+          transition={{
+            y: { duration: f.duration, delay: f.delay, repeat: Infinity, ease: 'linear' },
+            x: { duration: f.duration * 1.2, delay: f.delay, repeat: Infinity, ease: 'easeInOut' },
+          }}
+        />
       ))}
 
       {/* Curtain pull-apart */}

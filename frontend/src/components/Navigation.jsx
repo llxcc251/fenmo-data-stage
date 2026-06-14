@@ -60,7 +60,7 @@ export default function Navigation() {
       <div className="px-6 py-4">
         <div className="flex items-center gap-2 text-sm text-ink-500">
           <span className="text-vermillion-700/30">◈</span>
-          中山大学 · 智慧交通
+          数据戏台 · 非遗可视化
           <span className="text-vermillion-700/30">◈</span>
         </div>
         <div className="flex items-center justify-center gap-1 mt-2">

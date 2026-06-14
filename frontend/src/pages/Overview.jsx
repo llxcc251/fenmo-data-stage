@@ -204,7 +204,7 @@ export default function Overview() {
       labelLine: { length: 12, length2: 15, lineStyle: { color: '#3A3A3A' } },
       itemStyle: { borderRadius: 4, cursor: 'pointer' },
       emphasis: { itemStyle: { opacity: 0.8 } },
-      color: ['#F59E0B', '#DC2626', '#6366F1', '#6B7280', '#EF4444', '#FBBF24', '#818CF8', '#D4D4C8'],
+      color: ['#F59E0B', '#B91C1C', '#6366F1', '#14B8A6', '#DB2777', '#D97706', '#818CF8', '#8A8A88'],
     }],
   }
 

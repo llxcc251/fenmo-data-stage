@@ -154,10 +154,10 @@ export default function HeritageMap() {
         formatter: (p) => `${genreHeatmapData.genres[p.value[1]]} · ${genreHeatmapData.dyns[p.value[0]]}<br/>${p.value[2]} 部`,
       },
       grid: { left: 80, right: 40, top: 8, bottom: 40 },
-      xAxis: { type: 'category', data: genreHeatmapData.dyns, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitArea: { show: true } },
-      yAxis: { type: 'category', data: genreHeatmapData.genres, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitArea: { show: true } },
-      visualMap: { min: 0, max: maxV, calculable: true, orient: 'horizontal', left: 'center', bottom: 0, inRange: { color: ['#FAF7F0', '#F59E0B', '#DC2626'] }, textStyle: { color: '#6B6B68', fontSize: 9 } },
-      series: [{ type: 'heatmap', data: genreHeatmapData.data, cursor: 'pointer', label: { show: true, color: '#4A4A48', fontSize: 8 }, emphasis: { itemStyle: { shadowBlur: 10 } } }],
+      xAxis: { type: 'category', data: genreHeatmapData.dyns, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitLine: { show: true, lineStyle: { color: '#E5DFD0', width: 1 } } },
+      yAxis: { type: 'category', data: genreHeatmapData.genres, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitLine: { show: true, lineStyle: { color: '#E5DFD0', width: 1 } } },
+      visualMap: { min: 0, max: maxV, calculable: true, orient: 'horizontal', left: 'center', bottom: 0, inRange: { color: ['#D5CEBC', '#F59E0B', '#B91C1C'] }, textStyle: { color: '#6B6B68', fontSize: 9 } },
+      series: [{ type: 'heatmap', data: genreHeatmapData.data, cursor: 'pointer', label: { show: true, color: '#4A4A48', fontSize: 8 }, emphasis: { itemStyle: { shadowBlur: 10, borderColor: '#4A4A48', borderWidth: 1 } } }],
     }
   }, [genreHeatmapData])
 

@@ -55,6 +55,11 @@ export default {
         'stage-spotlight': 'spotlight 4s ease-in-out infinite',
         'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
         'drum-beat': 'drumBeat 0.3s ease-out',
+        'ink-drift-1': 'inkDrift1 35s ease-in-out infinite',
+        'ink-drift-2': 'inkDrift2 40s ease-in-out infinite',
+        'ink-drift-3': 'inkDrift3 30s ease-in-out infinite',
+        'ink-drift-4': 'inkDrift4 45s ease-in-out infinite',
+        'dust-float': 'dustFloat 8s linear infinite',
       },
       keyframes: {
         curtainOpen: {
@@ -81,6 +86,34 @@ export default {
           '0%': { transform: 'scale(1)' },
           '50%': { transform: 'scale(0.95)' },
           '100%': { transform: 'scale(1)' },
+        },
+        inkDrift1: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+          '25%': { transform: 'translate(40px, -60px) scale(1.1)' },
+          '50%': { transform: 'translate(-30px, 20px) scale(0.9)' },
+          '75%': { transform: 'translate(50px, 40px) scale(1.05)' },
+        },
+        inkDrift2: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+          '25%': { transform: 'translate(-50px, 40px) scale(0.95)' },
+          '50%': { transform: 'translate(30px, -50px) scale(1.15)' },
+          '75%': { transform: 'translate(-40px, -20px) scale(1)' },
+        },
+        inkDrift3: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1) rotate(0deg)' },
+          '33%': { transform: 'translate(30px, -40px) scale(1.1) rotate(5deg)' },
+          '66%': { transform: 'translate(-20px, 30px) scale(0.9) rotate(-5deg)' },
+        },
+        inkDrift4: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1) rotate(0deg)' },
+          '33%': { transform: 'translate(-35px, -30px) scale(0.9) rotate(-3deg)' },
+          '66%': { transform: 'translate(45px, 25px) scale(1.1) rotate(3deg)' },
+        },
+        dustFloat: {
+          '0%': { transform: 'translateY(100vh) translateX(0px)', opacity: '0' },
+          '10%': { opacity: '0.4' },
+          '90%': { opacity: '0.4' },
+          '100%': { transform: 'translateY(-10vh) translateX(20px)', opacity: '0' },
         },
       },
     },
