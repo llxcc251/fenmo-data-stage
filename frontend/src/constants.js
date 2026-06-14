@@ -1,9 +1,9 @@
 export const CATEGORY_COLORS = {
-  '生': '#6366F1',
-  '旦': '#EF4444',
-  '净': '#F59E0B',
-  '丑': '#6B7280',
-  '其他': '#3A3A3A',
+  '生': '#14B8A6',
+  '旦': '#DB2777',
+  '净': '#2563EB',
+  '丑': '#A3A3A3',
+  '其他': '#6B7280',
 }
 
 export const DYNASTY_ORDER = [

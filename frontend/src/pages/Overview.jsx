@@ -84,8 +84,8 @@ export default function Overview() {
       <div className="flex flex-col items-center justify-center text-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
         <p className="text-vermillion-500 text-sm mb-2">◆</p>
         <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
-        <p className="text-ink-600 text-[10px] mb-3">{error}</p>
-        <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+        <p className="text-ink-600 text-xs mb-3">{error}</p>
+        <button onClick={loadData} className="text-xs text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
       </div>
     )
   }
@@ -210,30 +210,35 @@ export default function Overview() {
 
   return (
     <div className="space-y-6">
-      <div className="page-title-wrap">
-        <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
-          <span className="text-vermillion-600 text-sm">◆</span>
+      <div className="flex items-start gap-4">
+        <div className="text-gold-600/50 text-sm font-title tracking-[0.5em] select-none shrink-0" style={{ writingMode: 'vertical-rl' }}>
           数据总览
-        </h2>
-        <p className="text-ink-500 text-xs mt-1 ml-4">京剧数据集整体规模一览</p>
+        </div>
+        <div className="page-title-wrap flex-1">
+          <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
+            <span className="text-vermillion-600 text-sm">◆</span>
+            数据总览
+          </h2>
+          <p className="text-ink-500 text-xs mt-1 ml-4">京剧数据集整体规模一览</p>
+        </div>
       </div>
 
       {/* stats cards - clickable */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         <StatCard label="剧目总数" value={stats.totalPlays} sub="台本" delay={0} onClick={() => navigate('/plays')} />
         <StatCard label="角色总数" value={stats.totalRoles} sub="人物" delay={0.05} onClick={() => navigate('/roles')} />
-        <StatCard label="角色关系" value={stats.totalRelations} sub="关联" delay={0.1} onClick={() => navigate('/roles')} />
+        <StatCard label="角色关系" value={stats.totalRelations} sub="同现网络" delay={0.1} onClick={() => navigate('/roles?tab=network')} />
         <StatCard label="声腔类型" value={stats.totalMelodies} sub="西皮二黄等" delay={0.15} onClick={() => navigate('/melody')} />
-        <StatCard label="行当种类" value={stats.uniqueRoleTypes} sub="生旦净丑" delay={0.2} onClick={() => navigate('/roles')} />
+        <StatCard label="行当种类" value={stats.uniqueRoleTypes} sub="脸谱色系" delay={0.2} onClick={() => navigate('/face-generator')} />
         <StatCard label="历史朝代" value={stats.uniqueDynasties} sub="时间跨度" delay={0.25} onClick={() => navigate('/heritage')} />
       </div>
 
       {/* data coverage */}
       <div className="flex flex-wrap items-center gap-3 px-1">
-        <span className="text-ink-500 text-[10px]">数据覆盖</span>
+        <span className="text-ink-500 text-xs">数据覆盖</span>
         {stats.coverage.map(c => (
           <span key={c.label}
-            className={`text-[10px] px-2 py-0.5 rounded ${
+            className={`text-xs px-2 py-0.5 rounded ${
               c.pct > 70 ? 'bg-ink-900/10 text-ink-700'
                 : c.pct > 30 ? 'bg-gold-500/10 text-gold-600/80'
                 : 'bg-paper-200/70 text-ink-500'

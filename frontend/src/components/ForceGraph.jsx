@@ -252,7 +252,7 @@ export default function ForceGraph({ selectedRoles, relations, width = 800, heig
       <div className="flex items-center justify-center text-center py-16">
         <div>
           <p className="text-ink-500 text-sm mb-1">暂无角色同现关系</p>
-          <p className="text-ink-600 text-[10px]">该朝代的角色间缺少共同出演的剧目数据</p>
+          <p className="text-ink-600 text-xs">该朝代的角色间缺少共同出演的剧目数据</p>
         </div>
       </div>
     )
@@ -277,7 +277,7 @@ export default function ForceGraph({ selectedRoles, relations, width = 800, heig
         </div>
       )}
       {/* Legend */}
-      <div className="absolute top-2 right-2 flex gap-3 text-[10px] text-ink-600/60 z-10">
+      <div className="absolute top-2 right-2 flex gap-3 text-xs text-ink-600/60 z-10">
         {Object.entries(CATEGORY_COLORS).filter(([k]) => k !== '其他').map(([cat, color]) => (
           <span key={cat} className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 4px ${color}` }} />

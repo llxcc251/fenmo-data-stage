@@ -44,8 +44,8 @@ export default function MelodyFlow() {
         <>
           <p className="text-vermillion-500 text-sm mb-2">◆</p>
           <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
-          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
-          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+          <p className="text-ink-600 text-xs mb-3">{error}</p>
+          <button onClick={loadData} className="text-xs text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
         </>
       ) : (
         <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
@@ -74,12 +74,17 @@ export default function MelodyFlow() {
 
   return (
     <div className="space-y-6">
-      <div className="page-title-wrap">
-        <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
-          <span className="text-vermillion-600 text-sm">◆</span>
+      <div className="flex items-start gap-4">
+        <div className="text-gold-600/50 text-sm font-title tracking-[0.5em] select-none shrink-0" style={{ writingMode: 'vertical-rl' }}>
           声腔之流
-        </h2>
-        <p className="text-ink-500 text-xs mt-1 ml-4">声腔类别与板式分布</p>
+        </div>
+        <div className="page-title-wrap flex-1">
+          <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
+            <span className="text-vermillion-600 text-sm">◆</span>
+            声腔之流
+          </h2>
+          <p className="text-ink-500 text-xs mt-1 ml-4">声腔类别与板式分布</p>
+        </div>
       </div>
 
       {/* melody cards - clickable */}
@@ -92,7 +97,7 @@ export default function MelodyFlow() {
           >
             <div className="font-title text-gold-500 mb-1 text-sm group-hover:text-gold-400 transition-colors">{m.name}</div>
             <div className="font-number text-2xl text-ink-900">{(m.plays?.length || 0).toLocaleString()}</div>
-            <div className="text-ink-500 text-[10px] mt-1">剧目</div>
+            <div className="text-ink-500 text-xs mt-1">剧目</div>
           </button>
         ))}
       </div>

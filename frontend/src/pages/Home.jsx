@@ -150,7 +150,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.6 }}
-          className="text-ink-500 text-[10px] tracking-[0.3em] pt-2"
+          className="text-ink-500 text-xs tracking-[0.3em] pt-2"
         >
           1473 部剧目 · 3576 个角色 · 10 种声腔
         </motion.p>

@@ -35,7 +35,7 @@ function getRoleColor(role) {
   if (role.faceColor && FACE_COLORS[role.faceColor]) return FACE_COLORS[role.faceColor].fill
   const fallback = FALLBACK_COLORS[role.type]
   if (fallback) return fallback
-  const catFallback = { '生': '#6366F1', '旦': '#EC4899', '净': '#1E3A8A', '丑': '#6B7280' }
+  const catFallback = { '生': '#14B8A6', '旦': '#DB2777', '净': '#2563EB', '丑': '#A3A3A3' }
   return catFallback[role.category] || '#6B7280'
 }
 
@@ -95,8 +95,8 @@ export default function FaceGenerator() {
         <>
           <p className="text-vermillion-500 text-sm mb-2">◆</p>
           <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
-          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
-          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+          <p className="text-ink-600 text-xs mb-3">{error}</p>
+          <button onClick={loadData} className="text-xs text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
         </>
       ) : (
         <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
@@ -109,12 +109,17 @@ export default function FaceGenerator() {
 
   return (
     <div className="space-y-6">
-      <div className="page-title-wrap">
-        <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
-          <span className="text-vermillion-600 text-sm">◆</span>
+      <div className="flex items-start gap-4">
+        <div className="text-gold-600/50 text-sm font-title tracking-[0.5em] select-none shrink-0" style={{ writingMode: 'vertical-rl' }}>
           脸谱生成
-        </h2>
-        <p className="text-ink-500 text-xs mt-1 ml-4">角色数据映射为脸谱视觉符号</p>
+        </div>
+        <div className="page-title-wrap flex-1">
+          <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
+            <span className="text-vermillion-600 text-sm">◆</span>
+            脸谱生成
+          </h2>
+          <p className="text-ink-500 text-xs mt-1 ml-4">角色数据映射为脸谱视觉符号</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
@@ -129,7 +134,7 @@ export default function FaceGenerator() {
             />
             <div className="max-h-[520px] overflow-y-auto space-y-0.5">
               {filteredRoles.length > 100 && (
-                <p className="text-ink-600 text-[10px] px-3 pb-1">前 100 个角色，输入名称搜索更多</p>
+                <p className="text-ink-600 text-xs px-3 pb-1">前 100 个角色，输入名称搜索更多</p>
               )}
               {filteredRoles.slice(0, 100).map(r => (
                 <button

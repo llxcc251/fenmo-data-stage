@@ -157,9 +157,17 @@ export default function HeritageMap() {
       xAxis: { type: 'category', data: genreHeatmapData.dyns, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitArea: { show: true } },
       yAxis: { type: 'category', data: genreHeatmapData.genres, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitArea: { show: true } },
       visualMap: { min: 0, max: maxV, calculable: true, orient: 'horizontal', left: 'center', bottom: 0, inRange: { color: ['#FAF7F0', '#F59E0B', '#DC2626'] }, textStyle: { color: '#6B6B68', fontSize: 9 } },
-      series: [{ type: 'heatmap', data: genreHeatmapData.data, label: { show: true, color: '#4A4A48', fontSize: 8 }, emphasis: { itemStyle: { shadowBlur: 10 } } }],
+      series: [{ type: 'heatmap', data: genreHeatmapData.data, cursor: 'pointer', label: { show: true, color: '#4A4A48', fontSize: 8 }, emphasis: { itemStyle: { shadowBlur: 10 } } }],
     }
   }, [genreHeatmapData])
+
+  const heatmapClick = useCallback((params) => {
+    if (!genreHeatmapData) return
+    const [di, gi] = params.value
+    const dynasty = genreHeatmapData.dyns[di]
+    const genre = genreHeatmapData.genres[gi]
+    if (dynasty && genre) navigate(`/plays?dynasty=${encodeURIComponent(dynasty)}&genre=${encodeURIComponent(genre)}`)
+  }, [navigate, genreHeatmapData])
 
   if (!timelineOption) return (
     <div className="flex flex-col items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
@@ -167,8 +175,8 @@ export default function HeritageMap() {
         <>
           <p className="text-vermillion-500 text-sm mb-2">◆</p>
           <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
-          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
-          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+          <p className="text-ink-600 text-xs mb-3">{error}</p>
+          <button onClick={loadData} className="text-xs text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
         </>
       ) : (
         <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
@@ -187,20 +195,25 @@ export default function HeritageMap() {
 
   return (
     <div className="space-y-6">
-      <div className="page-title-wrap">
-        <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
-          <span className="text-vermillion-600 text-sm">◆</span>
+      <div className="flex items-start gap-4">
+        <div className="text-gold-600/50 text-sm font-title tracking-[0.5em] select-none shrink-0" style={{ writingMode: 'vertical-rl' }}>
           传承之路
-        </h2>
-        <p className="text-ink-500 text-xs mt-1 ml-4">剧目来源与时代脉络</p>
+        </div>
+        <div className="page-title-wrap flex-1">
+          <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
+            <span className="text-vermillion-600 text-sm">◆</span>
+            传承之路
+          </h2>
+          <p className="text-ink-500 text-xs mt-1 ml-4">剧目来源与时代脉络</p>
+        </div>
       </div>
 
       {brushedDynasties && (
         <div className="opera-card p-3 flex items-center justify-between">
-          <p className="text-ink-500 text-[10px]">
+          <p className="text-ink-500 text-xs">
             筛选朝代：<span className="text-gold-400">{brushedDynasties.join(' · ')}</span>
           </p>
-          <button onClick={resetBrush} className="text-[10px] text-ink-600/50 hover:text-ink-600/70 transition-colors">
+          <button onClick={resetBrush} className="text-xs text-ink-600/50 hover:text-ink-600/70 transition-colors">
             重置筛选
           </button>
         </div>
@@ -225,7 +238,7 @@ export default function HeritageMap() {
       <div className="opera-card p-4">
         <h3 className="section-header text-xs text-ink-600/60 mb-3">题材 x 朝代 热度</h3>
         <div className="w-full" style={{ aspectRatio: '16/9', minHeight: 260 }}>
-          <ReactEChartsCore option={heatmapOption} style={{ width: '100%', height: '100%' }} />
+          <ReactEChartsCore option={heatmapOption} style={{ width: '100%', height: '100%' }} onEvents={{ click: heatmapClick }} />
         </div>
       </div>
     </div>

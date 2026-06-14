@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import useStore from '../store/useStore'
 import ForceGraph from '../components/ForceGraph'
 import ReactEChartsCore from 'echarts-for-react'
@@ -10,10 +10,11 @@ const CATEGORIES = ['生', '旦', '净', '丑']
 export default function RoleGraph() {
   const { plays, roles, relations, loaded, error, loadData } = useStore()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [category, setCategory] = useState('生')
   const [roleType, setRoleType] = useState('')
   const [dynasty, setDynasty] = useState('三国')
-  const [tab, setTab] = useState('hangdang')
+  const [tab, setTab] = useState(() => searchParams.get('tab') === 'network' ? 'network' : 'hangdang')
   useEffect(() => { if (!loaded) loadData() }, [loaded, loadData])
 
   // Roles from plays of the selected dynasty
@@ -67,8 +68,8 @@ export default function RoleGraph() {
         <>
           <p className="text-vermillion-500 text-sm mb-2">◆</p>
           <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
-          <p className="text-ink-600 text-[10px] mb-3">{error}</p>
-          <button onClick={loadData} className="text-[10px] text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
+          <p className="text-ink-600 text-xs mb-3">{error}</p>
+          <button onClick={loadData} className="text-xs text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
         </>
       ) : (
         <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
@@ -109,12 +110,17 @@ export default function RoleGraph() {
 
   return (
     <div className="space-y-6">
-      <div className="page-title-wrap">
-        <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
-          <span className="text-vermillion-600 text-sm">◆</span>
+      <div className="flex items-start gap-4">
+        <div className="text-gold-600/50 text-sm font-title tracking-[0.5em] select-none shrink-0" style={{ writingMode: 'vertical-rl' }}>
           角色之相
-        </h2>
-        <p className="text-ink-500 text-xs mt-1 ml-4">行当分布与角色类型</p>
+        </div>
+        <div className="page-title-wrap flex-1">
+          <h2 className="font-title text-2xl text-gold-500 flex items-center gap-2">
+            <span className="text-vermillion-600 text-sm">◆</span>
+            角色之相
+          </h2>
+          <p className="text-ink-500 text-xs mt-1 ml-4">行当分布与角色类型</p>
+        </div>
       </div>
 
       {/* Tab switcher */}
@@ -123,7 +129,7 @@ export default function RoleGraph() {
           { key: 'hangdang', label: '行当分布' },
           { key: 'network', label: '角色同现' },
         ].map(t => (
-          <button key={t.key} onClick={() => setTab(t.key)}
+          <button key={t.key} onClick={() => { setTab(t.key); setSearchParams({ tab: t.key === 'hangdang' ? undefined : 'network' }, { replace: true }) }}
             className={`px-4 py-1.5 text-xs rounded-t transition-colors ${
               tab === t.key
                 ? 'text-gold-400 bg-gold-500/10 border border-b-0 border-ink-700/30'
@@ -186,7 +192,7 @@ export default function RoleGraph() {
               {/* Role list */}
               <div className="space-y-1 max-h-[380px] overflow-y-auto">
                 {filteredRoles.length === 0 ? (
-                  <p className="text-ink-500 text-[10px] text-center py-8">该分类下没有角色</p>
+                  <p className="text-ink-500 text-xs text-center py-8">该分类下没有角色</p>
                 ) : (
                   filteredRoles.map(r => (
                     <button key={r.name} onClick={() => goToRole(r.name)}
@@ -214,7 +220,7 @@ export default function RoleGraph() {
               {DYNASTY_ORDER.filter(d => d !== '历史朝代不详' && plays.some(p => p.dynasty === d)).map(d => (
                 <button key={d}
                   onClick={() => setDynasty(d)}
-                  className={`px-2 py-1 text-[10px] rounded transition-colors ${
+                  className={`px-2 py-1 text-xs rounded transition-colors ${
                     dynasty === d
                       ? 'bg-gold-500/15 text-gold-400 border border-gold-500/30'
                       : 'text-ink-600/50 border border-transparent hover:text-ink-600/70 hover:bg-paper-200/70'
@@ -225,7 +231,7 @@ export default function RoleGraph() {
               ))}
             </div>
           </div>
-          <p className="text-ink-500 text-[10px] mb-2">
+          <p className="text-ink-500 text-xs mb-2">
             {dynasty} · {dynastyRoles.length} 个角色，节点大小=出演剧目数，连线粗细=同台频率，颜色按行当区分
           </p>
           <ForceGraph

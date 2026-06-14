@@ -22,7 +22,7 @@ export default function Navigation() {
           <span className="text-vermillion-600 text-sm">◆</span>
           粉墨数据台
         </h1>
-        <p className="text-ink-500 text-sm mt-1 tracking-wider">京剧数据集 · 沉浸式可视化</p>
+        <p className="text-ink-500 text-base mt-1 tracking-wider">京剧数据集 · 沉浸式可视化</p>
       </div>
 
       {/* nav items */}
@@ -45,10 +45,10 @@ export default function Navigation() {
                 {isActive && (
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-10 bg-gradient-to-b from-gold-500/80 via-vermillion-600/70 to-gold-500/80 rounded-r" />
                 )}
-                <span className={`font-title transition-transform duration-300 ${isActive ? 'translate-x-1' : 'group-hover:translate-x-1'}`}>
+                <span className={`font-title text-lg transition-transform duration-300 ${isActive ? 'translate-x-1' : 'group-hover:translate-x-1'}`}>
                   {item.label}
                 </span>
-                <span className="text-xs text-ink-500">{item.sub}</span>
+                <span className="text-sm text-ink-500">{item.sub}</span>
               </>
             )}
           </NavLink>
@@ -58,7 +58,7 @@ export default function Navigation() {
       {/* Decorative bottom */}
       <div className="border-t border-ink-700/10 mx-6" />
       <div className="px-6 py-4">
-        <div className="flex items-center gap-2 text-xs text-ink-500">
+        <div className="flex items-center gap-2 text-sm text-ink-500">
           <span className="text-vermillion-700/30">◈</span>
           中山大学 · 智慧交通
           <span className="text-vermillion-700/30">◈</span>
