@@ -100,18 +100,18 @@ export default function Overview() {
   }
 
   const dynastyOption = {
-    tooltip: { trigger: 'axis', backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
+    tooltip: { trigger: 'axis', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     grid: { left: 50, right: 16, top: 8, bottom: 28 },
     xAxis: {
       type: 'category',
       data: Object.entries(stats.dynastyCount).sort((a, b) => b[1] - a[1]).map(([k]) => k),
-      axisLabel: { color: '#6B7280', fontSize: 10 },
-      axisLine: { lineStyle: { color: '#3A3A3A' } },
+      axisLabel: { color: '#6B6B68', fontSize: 10 },
+      axisLine: { lineStyle: { color: '#D5CEBC' } },
     },
     yAxis: {
       type: 'value',
-      splitLine: { lineStyle: { color: '#2A2A2A' } },
-      axisLabel: { color: '#6B7280', fontSize: 10 },
+      splitLine: { lineStyle: { color: '#E5DFD0' } },
+      axisLabel: { color: '#6B6B68', fontSize: 10 },
     },
     series: [{
       type: 'bar',
@@ -126,7 +126,7 @@ export default function Overview() {
   }
 
   const wordCloudOption = {
-    tooltip: { show: true, backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
+    tooltip: { show: true, backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     series: [{
       type: 'wordCloud',
       shape: 'circle',
@@ -158,18 +158,18 @@ export default function Overview() {
   }
 
   const roleTypeOption = {
-    tooltip: { trigger: 'axis', backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
+    tooltip: { trigger: 'axis', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     grid: { left: 16, right: 40, top: 8, bottom: 28 },
     xAxis: {
       type: 'value',
-      splitLine: { lineStyle: { color: '#2A2A2A' } },
-      axisLabel: { color: '#6B7280', fontSize: 9 },
+      splitLine: { lineStyle: { color: '#E5DFD0' } },
+      axisLabel: { color: '#6B6B68', fontSize: 9 },
     },
     yAxis: {
       type: 'category',
       data: stats.topRoleTypes.map(([n]) => n).reverse(),
-      axisLabel: { color: '#D4D4C8', fontSize: 10 },
-      axisLine: { lineStyle: { color: '#3A3A3A' } },
+      axisLabel: { color: '#4A4A48', fontSize: 10 },
+      axisLine: { lineStyle: { color: '#D5CEBC' } },
     },
     series: [{
       type: 'bar',
@@ -178,18 +178,18 @@ export default function Overview() {
         color: { type: 'linear', x: 0, y: 0, x2: 1, y2: 0, colorStops: [{ offset: 0, color: '#6366F1' }, { offset: 1, color: '#818CF8' }] },
         borderRadius: [0, 2, 2, 0],
       },
-      label: { show: true, position: 'right', color: '#6B7280', fontSize: 9 },
+      label: { show: true, position: 'right', color: '#6B6B68', fontSize: 9 },
     }],
   }
 
   const genreOption = {
-    tooltip: { trigger: 'item', backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
+    tooltip: { trigger: 'item', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     series: [{
       type: 'pie',
       radius: ['20%', '70%'],
       center: ['50%', '50%'],
       data: Object.entries(stats.genreCount).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name, value]) => ({ name, value })),
-      label: { color: '#D4D4C8', fontSize: 13, formatter: '{b}: {d}%' },
+      label: { color: '#4A4A48', fontSize: 13, formatter: '{b}: {d}%' },
       labelLine: { length: 12, length2: 15, lineStyle: { color: '#3A3A3A' } },
       itemStyle: { borderRadius: 4, cursor: 'pointer' },
       emphasis: { itemStyle: { opacity: 0.8 } },

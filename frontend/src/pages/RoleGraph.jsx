@@ -79,7 +79,7 @@ export default function RoleGraph() {
 
   const sunburstOption = {
     tooltip: {
-      trigger: 'item', backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 },
+      trigger: 'item', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 },
       formatter: (params) => {
         if (!params.treePathInfo) return `${params.name}: ${params.value}`
         const path = params.treePathInfo.map(p => p.name).filter(Boolean).join(' → ')
@@ -90,8 +90,8 @@ export default function RoleGraph() {
       type: 'sunburst', data: sunburstData, radius: ['0%', '90%'],
       sort: 'desc', emphasis: { focus: 'descendant' },
       levels: [
-        {}, { r0: '10%', r: '45%', label: { color: '#D4D4C8', fontSize: 14, fontWeight: 'bold' } },
-        { r0: '45%', r: '75%', label: { color: '#D4D4C8', fontSize: 11 } },
+        {}, { r0: '10%', r: '45%', label: { color: '#4A4A48', fontSize: 14, fontWeight: 'bold' } },
+        { r0: '45%', r: '75%', label: { color: '#4A4A48', fontSize: 11 } },
       ],
       label: { rotate: 'tangential' },
       nodeClick: 'rootNode',

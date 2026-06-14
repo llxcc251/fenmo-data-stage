@@ -47,14 +47,14 @@ export default function MelodyFlow() {
   )
 
   const sankeyOption = {
-    tooltip: { trigger: 'item', formatter: (p) => `${p.data.source || p.name} → ${p.data.target || ''} ${p.value} 部剧目`, backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
+    tooltip: { trigger: 'item', formatter: (p) => `${p.data.source || p.name} → ${p.data.target || ''} ${p.value} 部剧目`, backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     series: [{
       type: 'sankey', layout: 'none',
       data: data.sankeyNodes,
       links: data.sankeyLinks,
       emphasis: { focus: 'adjacency' },
       lineStyle: { color: 'gradient', curveness: 0.5 },
-      label: { color: '#D4D4C8', fontSize: 10 },
+      label: { color: '#4A4A48', fontSize: 10 },
       nodeStyle: { borderColor: 'transparent' },
       levels: [
         { depth: 0, itemStyle: { color: '#DC2626' } },

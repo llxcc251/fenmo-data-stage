@@ -11,19 +11,19 @@ export default function Home() {
       x: Math.random() * 80 + 10,
       delay: Math.random() * 8,
       duration: 10 + Math.random() * 8,
-      size: 12 + Math.random() * 16,
+      size: 14 + Math.random() * 18,
       opacity: 0.04 + Math.random() * 0.06,
     }))
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center text-center overflow-hidden" style={{ minHeight: 'calc(100vh - 3rem)' }}>
+    <div className="flex flex-col items-center justify-center text-center overflow-hidden relative" style={{ minHeight: 'calc(100vh - 3rem)' }}>
       {/* Floating particles */}
       {particles.map((p, i) => (
         <motion.span
           key={i}
           className="absolute pointer-events-none select-none font-title"
-          style={{ left: `${p.x}%`, fontSize: p.size }}
+          style={{ left: `${p.x}%`, fontSize: p.size, color: '#4A4A48' }}
           initial={{ opacity: 0, y: '100vh' }}
           animate={{ opacity: [0, p.opacity, p.opacity, 0], y: ['100vh', '-10vh'] }}
           transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: 'linear' }}
@@ -32,23 +32,12 @@ export default function Home() {
         </motion.span>
       ))}
 
-      {/* Stage spotlight effect */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-        className="fixed top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[60vh] pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(245,158,11,0.08) 0%, rgba(220,38,38,0.04) 30%, transparent 60%)',
-        }}
-      />
-
       {/* Curtain pull-apart */}
       <motion.div
         initial={{ scaleX: 1 }}
         animate={{ scaleX: 0 }}
         transition={{ duration: 1.2, ease: [0.7, 0, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 h-full pointer-events-none origin-left"
+        className="fixed top-0 left-0 right-0 h-full pointer-events-none origin-left z-20"
         style={{
           background: 'linear-gradient(to right, #F0EBE0 0%, #E5DFD0 40%, #E5DFD0 60%, #F0EBE0 100%)',
           transformOrigin: 'left',
@@ -58,7 +47,7 @@ export default function Home() {
         initial={{ scaleX: 1 }}
         animate={{ scaleX: 0 }}
         transition={{ duration: 1.2, ease: [0.7, 0, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 h-full pointer-events-none origin-right"
+        className="fixed top-0 left-0 right-0 h-full pointer-events-none origin-right z-20"
         style={{
           background: 'linear-gradient(to left, #F0EBE0 0%, #E5DFD0 40%, #E5DFD0 60%, #F0EBE0 100%)',
           transformOrigin: 'right',
@@ -69,48 +58,55 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.8 }}
-        className="space-y-8 relative z-10"
+        className="space-y-10 relative z-10"
       >
-        {/* Stage curtain separator line */}
+        {/* Top decorative line */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="w-48 h-[1px] mx-auto bg-gradient-to-r from-transparent via-gold-500/60 to-transparent"
+          className="w-32 h-px mx-auto"
+          style={{
+            background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.3), rgba(245,158,11,0.25), transparent)',
+          }}
         />
 
-        {/* Subtitle */}
+        {/* Subtitle — theatrical flourish */}
         <motion.p
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-ink-500 text-sm tracking-[0.3em]"
+          className="text-ink-500 text-xs tracking-[0.4em]"
         >
-          <span className="text-vermillion-700/50 mx-2">◈</span>
           粉墨数据台
-          <span className="text-vermillion-700/50 mx-2">◈</span>
         </motion.p>
 
-        {/* Main title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+        {/* Main title — large calligraphy style */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="font-title text-6xl text-gold-500 tracking-[0.15em] leading-relaxed"
+          className="space-y-2"
         >
-          京剧数据集
-        </motion.h1>
+          <h1 className="font-title text-7xl md:text-8xl text-ink-900 leading-[1.3] tracking-[0.12em]">
+            京剧
+          </h1>
+          <h1 className="font-title text-5xl md:text-6xl text-ink-800 tracking-[0.25em] font-light">
+            数据集
+          </h1>
+        </motion.div>
 
-        {/* Decorative separator */}
+        {/* Decorative separator with diamonds */}
         <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="flex items-center justify-center gap-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="flex items-center justify-center gap-2"
         >
-          <span className="block w-12 h-[1px] bg-vermillion-700/40" />
-          <span className="text-vermillion-600/40 text-xs">◆</span>
-          <span className="block w-12 h-[1px] bg-gold-700/40" />
+          <span className="w-8 h-px" style={{ background: 'rgba(220,38,38,0.2)' }} />
+          <span style={{ color: 'rgba(220,38,38,0.2)', fontSize: '8px' }}>◆</span>
+          <span style={{ color: 'rgba(245,158,11,0.15)', fontSize: '8px' }}>◆</span>
+          <span className="w-8 h-px" style={{ background: 'rgba(245,158,11,0.15)' }} />
         </motion.div>
 
         {/* Description */}
@@ -118,44 +114,43 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.1 }}
-          className="text-ink-500/50 text-sm tracking-wider max-w-md mx-auto leading-relaxed"
+          className="text-ink-600/60 text-sm tracking-wider max-w-sm mx-auto leading-relaxed"
         >
-          以数据为谱，以屏幕为台，让京剧在数字空间中重新开场
+          以数据为谱，以屏幕为台
+          <br />
+          让京剧在数字空间中重新开场
         </motion.p>
 
-        {/* CTA button */}
+        {/* CTA — seal/chop style button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.3 }}
-          className="pt-8"
+          className="pt-4"
         >
-          <Link
-            to="/overview"
-            className="relative inline-block px-10 py-3 overflow-hidden group"
+          <Link to="/overview"
+            className="relative inline-flex items-center justify-center w-24 h-24 rounded-full
+                       bg-white/80 border-2 border-vermillion-600/30
+                       hover:bg-vermillion-600/5 hover:border-vermillion-600/50
+                       transition-all duration-500 group"
           >
-            {/* Button border */}
-            <span className="absolute inset-0 border border-gold-500/50 group-hover:border-gold-500/80 transition-colors duration-500" />
-            {/* Button background hover */}
-            <span className="absolute inset-0 bg-gradient-to-r from-gold-500/0 via-gold-500/5 to-gold-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            {/* Corner decorations */}
-            <span className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-gold-500/50 group-hover:border-gold-500 transition-colors duration-500" />
-            <span className="absolute -top-[1px] -right-[1px] w-2 h-2 border-t border-r border-gold-500/50 group-hover:border-gold-500 transition-colors duration-500" />
-            <span className="absolute -bottom-[1px] -left-[1px] w-2 h-2 border-b border-l border-gold-500/50 group-hover:border-gold-500 transition-colors duration-500" />
-            <span className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-gold-500/50 group-hover:border-gold-500 transition-colors duration-500" />
+            {/* Inner decorative ring */}
+            <span className="absolute inset-2 rounded-full border border-vermillion-600/15 group-hover:border-vermillion-600/30 transition-colors duration-500" />
             {/* Text */}
-            <span className="relative text-gold-400 group-hover:text-gold-300 tracking-widest text-sm transition-colors duration-500">
-              开 戏
+            <span className="relative font-title text-2xl tracking-widest text-vermillion-600/70 group-hover:text-vermillion-600 transition-colors duration-500"
+                  style={{ writingMode: 'vertical-rl', textOrientation: 'upright' }}
+            >
+              开戏
             </span>
           </Link>
         </motion.div>
 
-        {/* Bottom decorative */}
+        {/* Stats footer */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.6 }}
-          className="text-ink-500 text-[10px] tracking-[0.3em] pt-4"
+          className="text-ink-500 text-[10px] tracking-[0.3em] pt-2"
         >
           1473 部剧目 · 3576 个角色 · 10 种声腔
         </motion.p>

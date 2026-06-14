@@ -80,23 +80,23 @@ export default function HeritageMap() {
 
   // Memoized timeline option — depends on zoomRange so slider stays in sync
   const timelineOption = useMemo(() => fullData ? ({
-    tooltip: { trigger: 'axis', backgroundColor: '#1A1A1A', borderColor: '#3A3A3A', textStyle: { color: '#D4D4C8', fontSize: 11 } },
+    tooltip: { trigger: 'axis', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     grid: { left: 40, right: 16, top: 8, bottom: 48 },
     xAxis: {
       type: 'category',
       data: fullData.dynastyTimeline.map(d => d.name),
-      axisLabel: { color: '#6B7280', fontSize: 10 },
-      axisLine: { lineStyle: { color: '#3A3A3A' } },
+      axisLabel: { color: '#6B6B68', fontSize: 10 },
+      axisLine: { lineStyle: { color: '#D5CEBC' } },
     },
-    yAxis: { type: 'value', splitLine: { lineStyle: { color: '#2A2A2A' } }, axisLabel: { color: '#6B7280' } },
+    yAxis: { type: 'value', splitLine: { lineStyle: { color: '#E5DFD0' } }, axisLabel: { color: '#6B6B68' } },
     dataZoom: [{
       type: 'slider', show: true,
       start: zoomRange.start, end: zoomRange.end,
       bottom: 0, height: 20,
-      borderColor: '#3A3A3A', backgroundColor: '#1A1A1A',
+      borderColor: '#D5CEBC', backgroundColor: '#FFFFFD',
       fillerColor: 'rgba(245, 158, 11, 0.15)',
       handleStyle: { color: '#F59E0B' },
-      textStyle: { color: '#6B7280', fontSize: 9 },
+      textStyle: { color: '#6B6B68', fontSize: 9 },
       labelFormatter: (v) => fullData.dynastyTimeline[Math.round(v / 100 * (fullData.dynastyTimeline.length - 1))]?.name || '',
     }],
     series: [{
@@ -147,15 +147,15 @@ export default function HeritageMap() {
     return {
       tooltip: {
         position: 'top',
-        backgroundColor: '#1A1A1A', borderColor: '#3A3A3A',
-        textStyle: { color: '#D4D4C8', fontSize: 11 },
+        backgroundColor: '#FFFFFD', borderColor: '#D5CEBC',
+        textStyle: { color: '#4A4A48', fontSize: 11 },
         formatter: (p) => `${genreHeatmapData.genres[p.value[1]]} · ${genreHeatmapData.dyns[p.value[0]]}<br/>${p.value[2]} 部`,
       },
       grid: { left: 80, right: 40, top: 8, bottom: 40 },
-      xAxis: { type: 'category', data: genreHeatmapData.dyns, axisLabel: { color: '#6B7280', fontSize: 9 }, axisLine: { lineStyle: { color: '#3A3A3A' } }, splitArea: { show: true } },
-      yAxis: { type: 'category', data: genreHeatmapData.genres, axisLabel: { color: '#6B7280', fontSize: 9 }, axisLine: { lineStyle: { color: '#3A3A3A' } }, splitArea: { show: true } },
-      visualMap: { min: 0, max: maxV, calculable: true, orient: 'horizontal', left: 'center', bottom: 0, inRange: { color: ['#1A1A1A', '#DC2626', '#F59E0B'] }, textStyle: { color: '#6B7280', fontSize: 9 } },
-      series: [{ type: 'heatmap', data: genreHeatmapData.data, label: { show: true, color: '#D4D4C8', fontSize: 8 }, emphasis: { itemStyle: { shadowBlur: 10 } } }],
+      xAxis: { type: 'category', data: genreHeatmapData.dyns, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitArea: { show: true } },
+      yAxis: { type: 'category', data: genreHeatmapData.genres, axisLabel: { color: '#6B6B68', fontSize: 9 }, axisLine: { lineStyle: { color: '#D5CEBC' } }, splitArea: { show: true } },
+      visualMap: { min: 0, max: maxV, calculable: true, orient: 'horizontal', left: 'center', bottom: 0, inRange: { color: ['#1A1A1A', '#DC2626', '#F59E0B'] }, textStyle: { color: '#6B6B68', fontSize: 9 } },
+      series: [{ type: 'heatmap', data: genreHeatmapData.data, label: { show: true, color: '#4A4A48', fontSize: 8 }, emphasis: { itemStyle: { shadowBlur: 10 } } }],
     }
   }, [genreHeatmapData])
 
