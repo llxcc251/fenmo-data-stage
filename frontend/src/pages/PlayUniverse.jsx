@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useStore from '../store/useStore'
 import { DYNASTY_ORDER } from '../constants'
+import { InkDrop, ErrorState } from '../components/DataState'
 
 export default function PlayUniverse() {
   const { plays, roles, loaded, error, loadData } = useStore()
@@ -72,20 +73,10 @@ export default function PlayUniverse() {
     return list
   }, [plays, search, filters])
 
-  if (!loaded) return (
-    <div className="flex flex-col items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-      {error ? (
-        <>
-          <p className="text-vermillion-500 text-sm mb-2">◆</p>
-          <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
-          <p className="text-ink-600 text-xs mb-3">{error}</p>
-          <button onClick={loadData} className="text-xs text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
-        </>
-      ) : (
-        <p className="text-ink-500 animate-pulse text-sm">加载中...</p>
-      )}
-    </div>
-  )
+  if (!loaded) {
+    if (error) return <ErrorState message={error} onRetry={loadData} />
+    return <InkDrop text="加载剧目中" />
+  }
 
   return (
     <div className="space-y-6">

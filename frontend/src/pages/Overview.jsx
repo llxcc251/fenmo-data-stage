@@ -1,9 +1,20 @@
 import { useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import useStore from '../store/useStore'
 import StatCard from '../components/StatCard'
+import { InkDrop, ErrorState, EmptyState } from '../components/DataState'
 import ReactEChartsCore from 'echarts-for-react'
 import 'echarts-wordcloud'
+
+// Staggered section entrance — chart sections slide in from bottom
+const sectionVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.5, delay: 0.1 * i, ease: [0.4, 0, 0.2, 1] },
+  }),
+}
 
 export default function Overview() {
   const { plays, roles, melodies, relations, loaded, loading, error, loadData } = useStore()
@@ -79,36 +90,14 @@ export default function Overview() {
     if (genre) navigate(`/plays?genre=${encodeURIComponent(genre)}`)
   }, [navigate])
 
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center text-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-        <p className="text-vermillion-500 text-sm mb-2">◆</p>
-        <p className="text-ink-500 text-sm mb-1">数据加载失败</p>
-        <p className="text-ink-600 text-xs mb-3">{error}</p>
-        <button onClick={loadData} className="text-xs text-gold-500/60 hover:text-gold-400 transition-colors">重新加载</button>
-      </div>
-    )
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-        <p className="text-ink-500 animate-pulse text-sm tracking-wider">加载数据中...</p>
-      </div>
-    )
-  }
-
-  if (!stats) {
-    return (
-      <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 3rem)' }}>
-        <p className="text-ink-500 text-sm">无数据</p>
-      </div>
-    )
-  }
+  if (error) return <ErrorState message={error} onRetry={loadData} />
+  if (loading) return <InkDrop text="加载数据中" />
+  if (!stats) return <EmptyState message="无数据" />
 
   const dynastyOption = {
-    animationDuration: 1200,
+    animationDuration: 800,
     animationEasing: 'cubicOut',
+    animationDelay: (idx) => idx * 80,
     tooltip: { trigger: 'axis', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     grid: { left: 50, right: 16, top: 8, bottom: 28 },
     xAxis: {
@@ -135,8 +124,9 @@ export default function Overview() {
   }
 
   const wordCloudOption = {
-    animationDuration: 1200,
+    animationDuration: 1000,
     animationEasing: 'cubicOut',
+    animationDelay: (idx) => Math.abs(idx - 90) * 8, // spread from center
     tooltip: { show: true, backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     series: [{
       type: 'wordCloud',
@@ -165,8 +155,9 @@ export default function Overview() {
   }
 
   const roleTypeOption = {
-    animationDuration: 1200,
+    animationDuration: 800,
     animationEasing: 'cubicOut',
+    animationDelay: (idx) => idx * 60,
     tooltip: { trigger: 'axis', backgroundColor: '#FFFFFD', borderColor: '#D5CEBC', textStyle: { color: '#4A4A48', fontSize: 11 } },
     grid: { left: 56, right: 40, top: 8, bottom: 28 },
     xAxis: {
@@ -248,14 +239,14 @@ export default function Overview() {
         ))}
       </div>
 
-      {/* charts */}
-      <div className="opera-card p-4">
+      {/* charts — staged theatrical entrance */}
+      <motion.div custom={1} variants={sectionVariants} initial="hidden" animate="visible" className="opera-card p-4">
         <h3 className="section-header text-xs text-ink-600/60 mb-3">角色词云<span className="text-ink-500 ml-1">（字号越大表示出演剧目越多）</span></h3>
-        <div className="w-full" style={{ aspectRatio: '21/9', minHeight: 260 }}>
+        <div className="w-full word-cloud-reveal" style={{ aspectRatio: '21/9', minHeight: 260 }}>
           <ReactEChartsCore option={wordCloudOption} style={{ width: '100%', height: '100%' }} onEvents={{ click: wordCloudClick }} />
         </div>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      </motion.div>
+      <motion.div custom={2} variants={sectionVariants} initial="hidden" animate="visible" className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="opera-card p-4">
           <h3 className="section-header text-xs text-ink-600/60 mb-3">行当子类 Top 10<span className="text-ink-500 ml-1">（角色数量排行）</span></h3>
           <div className="w-full" style={{ aspectRatio: '16/9', minHeight: 220 }}>
@@ -268,13 +259,13 @@ export default function Overview() {
             <ReactEChartsCore option={genreOption} style={{ width: '100%', height: '100%' }} onEvents={{ click: genreClick }} />
           </div>
         </div>
-      </div>
-      <div className="opera-card p-4">
+      </motion.div>
+      <motion.div custom={3} variants={sectionVariants} initial="hidden" animate="visible" className="opera-card p-4">
         <h3 className="section-header text-xs text-ink-600/60 mb-3">朝代分布（点击查看剧目）</h3>
         <div className="w-full" style={{ aspectRatio: '16/9', minHeight: 240 }}>
           <ReactEChartsCore option={dynastyOption} style={{ width: '100%', height: '100%' }} onEvents={{ click: dynastyClick }} />
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

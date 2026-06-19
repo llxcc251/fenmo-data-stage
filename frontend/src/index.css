@@ -22,6 +22,20 @@
       repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 0, 0, 0.004) 1px, rgba(0, 0, 0, 0.004) 2px);
   }
 
+  /* Animated grain overlay — very subtle */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+    animation: grainShift 8s steps(8) infinite;
+    pointer-events: none;
+  }
+
   /* ===== Scrollbar ===== */
   ::-webkit-scrollbar {
     width: 6px;
@@ -85,12 +99,14 @@
     @apply rounded-lg border;
     border-color: rgba(180, 175, 165, 0.2);
     position: relative;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+    transition: box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+    transform: translateY(0);
   }
   .opera-card:hover {
     border-color: rgba(245, 158, 11, 0.25);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.04), 0 0 30px rgba(245, 158, 11, 0.03);
+    transform: translateY(-1px);
   }
   /* Corner ornament — hover only */
   .opera-card::before {
@@ -139,18 +155,30 @@
     background: linear-gradient(90deg, rgba(220, 38, 38, 0.3), rgba(245, 158, 11, 0.2), transparent);
   }
 
-  /* Lantern dot decoration */
-  .lantern-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #DC2626;
-    animation: lanternGlow 3s ease-in-out infinite;
-  }
+}
 
-  /* Fade-in-up for page content */
-  .page-content {
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
+/* ===== Grain animation keyframes ===== */
+@keyframes grainShift {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-2px, 1px); }
+  20% { transform: translate(1px, -1px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(2px, 0); }
+  50% { transform: translate(-1px, -2px); }
+  60% { transform: translate(0, 1px); }
+  70% { transform: translate(2px, -1px); }
+  80% { transform: translate(-2px, 0); }
+  90% { transform: translate(1px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ===== Word cloud spread from center ===== */
+@keyframes wordCloudSpread {
+  0% { clip-path: circle(0% at 50% 50%); }
+  100% { clip-path: circle(70% at 50% 50%); }
+}
+
+.word-cloud-reveal {
+  animation: wordCloudSpread 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+  clip-path: circle(0% at 50% 50%);
 }

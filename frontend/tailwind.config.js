@@ -49,44 +49,14 @@ export default {
         number: ['Orbitron', '"JetBrains Mono"', 'monospace'],
       },
       animation: {
-        'curtain-open': 'curtainOpen 1.2s ease-out forwards',
-        'curtain-close': 'curtainClose 0.8s ease-in forwards',
-        'lantern-glow': 'lanternGlow 3s ease-in-out infinite',
-        'stage-spotlight': 'spotlight 4s ease-in-out infinite',
-        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
-        'drum-beat': 'drumBeat 0.3s ease-out',
         'ink-drift-1': 'inkDrift1 35s ease-in-out infinite',
         'ink-drift-2': 'inkDrift2 40s ease-in-out infinite',
         'ink-drift-3': 'inkDrift3 30s ease-in-out infinite',
         'ink-drift-4': 'inkDrift4 45s ease-in-out infinite',
         'dust-float': 'dustFloat 8s linear infinite',
+        'spotlight-sweep': 'spotlightSweep 25s ease-in-out infinite',
       },
       keyframes: {
-        curtainOpen: {
-          '0%': { transform: 'scaleY(1)', opacity: '1' },
-          '100%': { transform: 'scaleY(0)', opacity: '0' },
-        },
-        curtainClose: {
-          '0%': { transform: 'scaleY(0)', opacity: '0' },
-          '100%': { transform: 'scaleY(1)', opacity: '1' },
-        },
-        lanternGlow: {
-          '0%, 100%': { filter: 'brightness(0.8) drop-shadow(0 0 4px #F59E0B)' },
-          '50%': { filter: 'brightness(1.2) drop-shadow(0 0 12px #F59E0B)' },
-        },
-        spotlight: {
-          '0%, 100%': { opacity: '0.6' },
-          '50%': { opacity: '1' },
-        },
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        drumBeat: {
-          '0%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(0.95)' },
-          '100%': { transform: 'scale(1)' },
-        },
         inkDrift1: {
           '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
           '25%': { transform: 'translate(40px, -60px) scale(1.1)' },
@@ -114,6 +84,12 @@ export default {
           '10%': { opacity: '0.4' },
           '90%': { opacity: '0.4' },
           '100%': { transform: 'translateY(-10vh) translateX(20px)', opacity: '0' },
+        },
+        spotlightSweep: {
+          '0%, 100%': { transform: 'translate(-20%, -10%) scale(1)', opacity: '0.5' },
+          '25%': { transform: 'translate(10%, 5%) scale(1.15)', opacity: '0.8' },
+          '50%': { transform: 'translate(20%, -5%) scale(0.9)', opacity: '0.4' },
+          '75%': { transform: 'translate(-10%, 10%) scale(1.05)', opacity: '0.7' },
         },
       },
     },

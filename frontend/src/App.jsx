@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Layout from './components/Layout'
 import ErrorBoundary from './components/ErrorBoundary'
-import SkeletonCard from './components/SkeletonCard'
+import { InkDrop } from './components/DataState'
 import Home from './pages/Home'
 
 const Overview = lazy(() => import('./pages/Overview'))
@@ -15,23 +15,20 @@ const FaceGenerator = lazy(() => import('./pages/FaceGenerator'))
 
 function PageLoader() {
   return (
-    <div className="space-y-6 p-6">
-      <div className="animate-pulse">
-        <div className="h-6 w-32 bg-paper-200/80 rounded" />
-        <div className="h-3 w-48 bg-paper-200/80 rounded mt-2" />
-      </div>
-      <SkeletonCard count={6} />
+    <div className="p-6">
+      <InkDrop text="加载中" />
     </div>
   )
 }
 
+// ---- Theatrical page transition ----
 function PageTransition({ children }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.25, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 20, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -20, scale: 0.97 }}
+      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
     >
       {children}
     </motion.div>

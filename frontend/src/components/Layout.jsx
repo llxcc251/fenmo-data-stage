@@ -1,9 +1,18 @@
 import Navigation from './Navigation'
 
+// Gold dust particles
 const dustParticles = Array.from({ length: 20 }, (_, i) => ({
   left: 5 + (i * 17 + 7) % 85,
   delay: (i * 13) % 8,
   duration: 7 + (i % 6),
+}))
+
+// Ember particles
+const emberParticles = Array.from({ length: 10 }, (_, i) => ({
+  left: 10 + (i * 31 + 5) % 80,
+  delay: (i * 7) % 10,
+  duration: 9 + (i % 5),
+  size: 1 + (i % 3),
 }))
 
 export default function Layout({ children }) {
@@ -12,7 +21,7 @@ export default function Layout({ children }) {
       <Navigation />
       <main className="flex-1 overflow-auto stage-curtain relative">
 
-        {/* Ambient ink-wash blobs — constrained to main area */}
+        {/* Ambient ink-wash blobs */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" style={{ left: '14rem' }}>
           <div className="absolute w-[500px] h-[500px] rounded-full bg-vermillion-600/5 blur-3xl animate-ink-drift-1"
             style={{ top: '-5%', left: '-5%' }} />
@@ -24,15 +33,45 @@ export default function Layout({ children }) {
             style={{ bottom: '-5%', right: '20%' }} />
         </div>
 
-        {/* Floating gold dust */}
+        {/* Slow-moving stage spotlight */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" style={{ left: '14rem' }}>
+          <div className="absolute w-[800px] h-[600px] rounded-full opacity-[0.06] mix-blend-overlay animate-spotlight-sweep"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(245,158,11,0.6) 0%, rgba(220,38,38,0.2) 30%, transparent 60%)',
+              transformOrigin: 'center',
+            }}
+          />
+        </div>
+
+        {/* Footlight glow at bottom */}
+        <div className="fixed bottom-0 pointer-events-none z-0" style={{
+          left: '14rem', right: 0, height: '120px',
+          background: 'linear-gradient(0deg, rgba(220,38,38,0.06) 0%, rgba(245,158,11,0.03) 40%, transparent 100%)',
+        }} />
+
+        {/* Floating particles */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" style={{ left: '14rem' }}>
           {dustParticles.map((p, i) => (
-            <div key={i}
-              className="absolute w-[2px] h-[2px] rounded-full bg-gold-400/30 animate-dust-float"
+            <div key={`dust-${i}`}
+              className="absolute w-[2px] h-[2px] rounded-full animate-dust-float"
               style={{
                 left: `${p.left}%`,
+                backgroundColor: 'rgba(245,158,11,0.3)',
                 animationDelay: `${p.delay}s`,
                 animationDuration: `${p.duration}s`,
+              }}
+            />
+          ))}
+          {emberParticles.map((p, i) => (
+            <div key={`ember-${i}`}
+              className="absolute rounded-full animate-dust-float"
+              style={{
+                left: `${p.left}%`,
+                width: p.size, height: p.size,
+                backgroundColor: 'rgba(220,38,38,0.2)',
+                boxShadow: '0 0 4px rgba(220,38,38,0.15)',
+                animationDelay: `${p.delay}s`,
+                animationDuration: `${p.duration + 3}s`,
               }}
             />
           ))}
