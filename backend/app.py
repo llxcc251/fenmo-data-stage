@@ -2,11 +2,30 @@ import json, os
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=None)
 CORS(app)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 PDF_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'jieya')
+FRONTEND_DIST = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend', 'dist')
+
+# ── Serve frontend built assets ──
+@app.route('/assets/<path:filename>')
+def frontend_assets(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIST, 'assets'), filename)
+
+# ── Serve face images ──
+@app.route('/faces/<path:filename>')
+def frontend_faces(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIST, '..', 'public', 'faces'), filename)
+
+# ── Serve index.html for all non-API routes (SPA fallback) ──
+@app.route('/')
+@app.route('/<path:path>')
+def frontend_index(path='index.html'):
+    if path.startswith('api/'):
+        return jsonify({'error': 'not found'}), 404
+    return send_from_directory(FRONTEND_DIST, 'index.html')
 
 def load_json(name):
     with open(os.path.join(DATA_DIR, name), encoding='utf-8') as f:
@@ -145,4 +164,5 @@ def get_play_pdf(play_id):
     return jsonify({'error': 'not found'}), 404
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port, debug=False)
